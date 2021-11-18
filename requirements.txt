@@ -1,0 +1,3 @@
+PySide2~=5.15.2
+numpy~=1.21.4
+moviepy~=1.0.3
