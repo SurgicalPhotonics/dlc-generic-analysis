@@ -1,6 +1,7 @@
 import platform
+import sys
 
-from PySide2 import QtWidgets, QtCore, QtMultimedia
+from PySide2 import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from typing import List
 
 
@@ -16,7 +17,8 @@ class GoToTime(QtWidgets.QWidget):
 
 
 class TrimWidget(QtWidgets.QWidget):
-    def __init__(self, trimmer, video_paths: List[str], parent=None):
+    def __init__(self, video_paths: List[str], parent=None):
+        super(TrimWidget, self).__init__()
         if platform.system() == "Windows":
             fast_reverse = "\u23EA"
             fast_forward = "\u23E9"
@@ -25,33 +27,34 @@ class TrimWidget(QtWidgets.QWidget):
             fast_reverse = "\u23ea"
             fast_forward = "\u23e9"
             play_pause = "\u23ef"
-        super(TrimWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
         self.video_loaded = False
         self.video_playing = False
-        self.trimmer = trimmer
         self.video_paths = video_paths
         self.current_video_index = 0
         self.subclip_duration = 0
         self.setParent(parent)
-        self.topui.setLayout(QtWidgets.QHBoxLayout())
-        self.topui.videos_navigate = QtWidgets.QWidget()
-        self.videos_navogate.setLayout(QtWidgets.QHBoxLayout())
+        self.top_ui = QtWidgets.QWidget()
+        self.top_ui.setLayout(QtWidgets.QHBoxLayout())
+        self.top_ui.videos_navigate = QtWidgets.QWidget()
+        self.videos_navigate = QtWidgets.QWidget()
+        self.videos_navigate.setLayout(QtWidgets.QHBoxLayout())
         self.previous_video_button = QtWidgets.QPushButton("Previous Video")
         self.previous_video_button.clicked.connect(self.on_click_previous_video)
         self.previous_video_button.setDisabled(True)
-        self.videos_navogate.layout().addWidget(self.previous_video_button)
+        self.videos_navigate.layout().addWidget(self.previous_video_button)
         self.next_video_button = QtWidgets.QPushButton("Next Video")
         self.next_video_button.clicked.connect(self.on_click_next_video)
-        self.videos_navogate.layout().addWidget(self.next_video_button)
-        self.topui.layout().addWidget(self.videos_navigate)
-        self.topui.filename_label = QtWidgets.QLabel(self.current_file)
+        self.videos_navigate.layout().addWidget(self.next_video_button)
+        self.top_ui.layout().addWidget(self.videos_navigate)
+        self.top_ui.filename_label = QtWidgets.QLabel(self.video_paths[0])
 
-        self.vieo_viewer = QtWidgets.QWidget()
-        self.vieo_viewer.setLayout(QtWidgets.QHBoxLayout())
-        self.vieo_viewer.layout()
+        self.video_viewer = QtMultimediaWidgets.QVideoWidget()
         self.player = QtMultimedia.QMediaPlayer()
-        self.load_video(self.current_file)
+        self.player.setVideoOutput(self.video_viewer)
+        self.player.setMuted(True)
+
+        self.load_video(self.video_paths[0])
         self.trim_beginning = 0  # the beginning point for the trim in milliseconds
         self.trim_end = self.player.duration()  # the end point for the trim in milliseconds
         self.play_pause_widget = QtWidgets.QWidget()
@@ -87,13 +90,18 @@ class TrimWidget(QtWidgets.QWidget):
         self.trim_control.layout().addWidget(self.goto_end)
         self.trim_control.layout().addWidget(self.subclip_duration_label)
         self.layout().addWidget(self.top_ui)
+        self.layout().addWidget(self.video_viewer)
+        self.layout().addWidget(self.trim_control)
+        # self.loop = QtCore.QEventLoop(self)
+        # self.loop.processEvents(self.e)
+        self.show()
+        # self.loop.exec_()
 
     def load_video(self, path):
-        self.player.setSource(QtCore.QUrl.fromLocalFile(path))
-        self.player.play()
+        self.player.setMedia(QtCore.QUrl.fromLocalFile(path))
 
     def on_click_play_pause(self, e):
-        state = self.player.playbackState()
+        state = self.player.state()
         if state == QtMultimedia.QMediaPlayer.PlayingState:
             self.player.pause()
         elif state == QtMultimedia.QMediaPlayer.PausedState:
@@ -134,6 +142,13 @@ class TrimWidget(QtWidgets.QWidget):
                 self.next_video_button.setEnabled(False)
             self.load_video(self.video_paths[self.current_video_index])
 
+    def on_close(self, e):
+        self.loop.quit()
+        self.destroy()
 
 
+if __name__ == '__main__':
+    app = QtWidgets.QApplication()
+    window = TrimWidget(sys.argv[1:])
+    app.exec_()
 

@@ -2,6 +2,7 @@ import os
 import cv2
 from typing import List
 import moviepy.editor
+from trimmer_gui import TrimWidget
 
 
 def resize(path: str, width):
@@ -9,8 +10,6 @@ def resize(path: str, width):
     clip_resized = clip.resize(width=width)
     filename, extension = os.path.splitext(path)
     clip_resized.write_videofile(filename + "_resized" + extension)
-
-
 
 
 class Trimmer:
@@ -108,3 +107,5 @@ class Trimmer:
         self.frame.Destroy()
         self.finish = True
 
+    def show(self):
+        self.frame = TrimWidget(self, self.videopaths)

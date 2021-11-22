@@ -25,11 +25,11 @@ class Line:
         intercept: float = None,
     ):
         """
-        creates a Line either based on 2 points or a slope and intercept
-        :param end1:
-        :param end2:
-        :param slope:
-        :param intercept:
+        creates a Line either between 2 points or a slope and intercept
+        :param end1: The first point for the line.
+        :param end2: The second point for the line.
+        :param slope: The slope of the line.
+        :param intercept: the Y intercept of the line
         """
         if end1 is not None and end2 is not None:
             if end1[0] > end2[0]:

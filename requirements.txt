@@ -3,3 +3,6 @@ numpy~=1.20.0
 moviepy~=1.0.3
 QtPy>=1.11.2
 scipy~=1.7.2
+deeplabcut~=2.2.0.2
+pandas~=1.3.4
+opencv-python-headless~=4.5.4.58
