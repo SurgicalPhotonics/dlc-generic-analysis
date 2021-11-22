@@ -1,21 +1,26 @@
 import platform
 import sys
-from PySide2 import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
+from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from typing import List
-
+from video_tools import Trimmer
 
 class GoToTime(QtWidgets.QWidget):
     def __init__(self, text: str, time=0):
         super(GoToTime, self).__init__()
-        self.time = time
+        self.text = text
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.label = QtWidgets.QLabel(f"{text} {round(self.time, 2)}")
+        self.label = QtWidgets.QLabel(f"{text} {round(time, 2)}")
         self.layout().addWidget(self.label)
         self.goto_button = QtWidgets.QPushButton("Go To")
         self.layout().addWidget(self.goto_button)
 
+    def update_label(self, time):
+        self.label = QtWidgets.QLabel(f"{self.text} {round(time, 2)}")
+
 
 class TrimWidget(QtWidgets.QWidget):
+    keyPressed = QtCore.Signal(int)
+
     def __init__(self, video_paths: List[str], parent=None):
         super(TrimWidget, self).__init__()
         self.setWindowTitle("Trim Video(s)")
@@ -51,6 +56,7 @@ class TrimWidget(QtWidgets.QWidget):
         self.top_ui.filename_label = QtWidgets.QLabel("")
 
         self.video_viewer = QtMultimediaWidgets.QVideoWidget()
+        self.video_viewer.resize(QtCore.QSize(1920, 1080))
         self.player = QtMultimedia.QMediaPlayer()
         self.player.setMuted(True)
 
@@ -79,24 +85,35 @@ class TrimWidget(QtWidgets.QWidget):
         self.trim_end_button = QtWidgets.QPushButton("Trim End")
         self.trim_end_button.clicked.connect(self.on_click_trim_end)
         self.trim_buttons_widget.layout().addWidget(self.trim_end_button)
-        self.goto_start = GoToTime("Start Time")
-        self.goto_end = GoToTime("End Time")
-        self.subclip_duration_label = QtWidgets.QLabel(f"Sub-clip Duration {self.subclip_duration}")
-        self.trim_control = QtWidgets.QWidget()
-        self.trim_control.setLayout(QtWidgets.QGridLayout())
-        self.trim_control.layout().addWidget(self.play_pause_widget)
         self.slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         self.slider.setRange(0, 0)
         self.slider.sliderMoved.connect(self.on_slider_move)
-        self.trim_control.layout().addWidget(self.slider)
-        self.trim_control.layout().addWidget(self.trim_buttons_widget)
-        self.trim_control.layout().addWidget(self.goto_start)
-        self.trim_control.layout().addWidget(self.goto_end)
-        self.trim_control.layout().addWidget(self.subclip_duration_label)
+        self.goto_start = GoToTime("Start Time")
+        self.goto_end = GoToTime("End Time")
+        self.subclip_duration_label = QtWidgets.QLabel(f"Sub-clip Duration {self.subclip_duration}")
+        self.finish_buttom = QtWidgets.QPushButton("Finish")
+        self.finish_buttom.clicked.connect(self.on_click_finish)
+        self.trim_control = QtWidgets.QWidget()
+        self.trim_control.setLayout(QtWidgets.QGridLayout())
+        x, y = 0, 0
+        self.trim_control.layout().addWidget(self.play_pause_widget, x, y)
+        y += 1
+        self.trim_control.layout().addWidget(self.trim_buttons_widget, x, y)
+        y = 0
+        x += 1
+        self.trim_control.layout().addWidget(self.slider, x, y, x, y+2)
+        x += 1
+        self.trim_control.layout().addWidget(self.goto_start, x, y)
+        y += 1
+        self.trim_control.layout().addWidget(self.goto_end, x, y)
+        y= 0
+        x +=1
+        self.trim_control.layout().addWidget(self.subclip_duration_label, x, y)
+        y += 1
+        self.trim_control.layout().addWidget(self.finish_buttom, x, y)
         self.layout().addWidget(self.top_ui)
-        self.layout().addWidget(self.video_viewer)
+        self.layout().addWidget(self.video_viewer, alignment=QtCore.Qt.AlignCenter)
         self.layout().addWidget(self.trim_control)
-
         self.player.stateChanged.connect(self.state_changed)
         self.player.positionChanged.connect(self.position_changed)
         self.player.durationChanged.connect(self.duration_changed)
@@ -108,10 +125,11 @@ class TrimWidget(QtWidgets.QWidget):
 
     def on_click_play_pause(self, e):
         state = self.player.state()
+        print(f"state = {state}")
         if state == QtMultimedia.QMediaPlayer.PlayingState:
             self.player.pause()
             print("pause")
-        elif state == QtMultimedia.QMediaPlayer.PausedState:
+        else:
             self.player.play()
             print("play")
 
@@ -128,9 +146,19 @@ class TrimWidget(QtWidgets.QWidget):
 
     def on_click_trim_start(self, e):
         self.trim_beginning = self.player.position()
+        if self.trim_end < self.trim_beginning:
+            self.trim_end = self.trim_beginning
+        self.goto_start.update_label(self.trim_beginning)
+        subclip_duration = (self.trim_end - self.trim_beginning) / 1000
+        self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
 
     def on_click_trim_end(self, e):
         self.trim_end = self.player.position()
+        self.goto_end.update_label(self.trim_end)
+        subclip_duration = (self.trim_end - self.trim_beginning) / 1000
+        self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
+        if self.trim_beginning> self.trim_end:
+            self.trim_beginning = self.trim_end
 
     def on_click_previous_video(self, e):
         if self.current_video_index > 0:
@@ -165,6 +193,22 @@ class TrimWidget(QtWidgets.QWidget):
 
     def duration_changed(self, length):
         self.slider.setRange(0, length)
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+        super(TrimWidget, self).keyPressEvent(event)
+        self.keyPressed.emit(event.key())
+
+    def on_keypress(self, key):
+        if key == QtCore.Qt.Key_space:
+            if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
+                self.player.pause()
+            else:
+                self.player.play()
+        if key == QtCore.Qt.Key_Forward:
+            pass
+
+    def on_click_finish(self, e):
+        pass
 
 
 if __name__ == '__main__':
