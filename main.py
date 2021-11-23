@@ -8,7 +8,6 @@ import video_tools
 
 
 class MainWidget(QtWidgets.QWidget):
-
     def __init__(self, model_path):
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
@@ -62,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication()
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow(sys.argv[1])
     app.exec_()

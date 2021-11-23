@@ -16,13 +16,28 @@ def analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str], st
     dest, _ = os.path.split(paths[0])
     if gputouse >= 0:
         slug = analyze_videos(
-            cfg, paths, videotype=vidtype, destfolder=dest, gputouse=gputouse, save_as_csv=True
+            cfg,
+            paths,
+            videotype=vidtype,
+            destfolder=dest,
+            gputouse=gputouse,
+            save_as_csv=True,
         )
     else:
         slug = analyze_videos(
-            cfg, paths, videotype=vidtype, destfolder=dest, gputouse=None, save_as_csv=True, TFGPUinference=False
+            cfg,
+            paths,
+            videotype=vidtype,
+            destfolder=dest,
+            gputouse=None,
+            save_as_csv=True,
+            TFGPUinference=False,
         )
     h5 = []
     for path in paths:
-        h5.append(os.path.join(dest, os.path.splitext(os.path.split(path)[1])[0] + slug + ".h5"))
+        h5.append(
+            os.path.join(
+                dest, os.path.splitext(os.path.split(path)[1])[0] + slug + ".h5"
+            )
+        )
     return h5, slug
