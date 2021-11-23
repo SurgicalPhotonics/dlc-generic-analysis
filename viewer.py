@@ -1,5 +1,4 @@
-from qtpy import QtWidgets, QtCore, QtGui
-from qtpy import QtMultimedia
+from qtpy import QtWidgets
 
 
 class ViewWidget(QtWidgets.QWidget):
@@ -9,7 +8,6 @@ class ViewWidget(QtWidgets.QWidget):
         self.last_frame = -1
         self.playing = False
         self.loaded = False
-
         self.load_file_button = QtWidgets.QPushButton("Load File")
         self.matlab_button = QtWidgets.QPushButton("Export to Matlab")
         self.convert_button = QtWidgets.QPushButton("Convert to MM")
@@ -25,7 +23,7 @@ class ViewWidget(QtWidgets.QWidget):
         self.fast_forward_button = QtWidgets.QPushButton("fr")
         self.goto_button = QtWidgets.QPushButton("Go To")
         self.seek_edit = QtWidgets.QLineEdit()
-        self.scub_bar = QtWidgets.QSlider
+        self.scrub_bar = QtWidgets.QSlider()
         navigate_widget = QtWidgets.QWidget()
         navigate_widget.setLayout(QtWidgets.QGridLayout())
         navigate_widget.layout().addWidget(self.fast_reverse_button)
@@ -33,7 +31,7 @@ class ViewWidget(QtWidgets.QWidget):
         navigate_widget.layout().addWidget(self.fast_forward_button)
         navigate_widget.layout().addWidget(self.goto_button)
         navigate_widget.layout().addWidget(self.seek_edit)
-        navigate_widget.layout().addWidget(self.scub_bar)
+        navigate_widget.layout().addWidget(self.scrub_bar)
         self.navigate_widget = navigate_widget
         self.setLayout(QtWidgets.QGridLayout())
         self.layout().addWidget(self.top_widget, 0, 0)

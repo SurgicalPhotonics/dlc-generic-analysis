@@ -1,7 +1,7 @@
 import sys
-
 # from PySide2 import QtWidgets, QtCore, QtGui
 from qtpy import QtWidgets, QtCore, QtGui
+from trimmer import Trimmer
 from abc import ABC, abstractmethod
 
 import video_tools
@@ -32,7 +32,9 @@ class MainWidget(QtWidgets.QWidget):
 
     def on_click_trim(self):
         vids = self.open_files("Select videos to trim")
-        trimmer = video_tools.Trimmer(vids, show=True)
+        trimmer = Trimmer(vids)
+        trimmer.show()
+
 
     def open_dir(self, text):
         files_dir, _ = QtWidgets.QFileDialog.getExistingDirectory(
@@ -47,7 +49,7 @@ class MainWidget(QtWidgets.QWidget):
             self,
             "Select Images",
             "",
-            "Tiff images (*.tif *.tiff);; PNG Images (*.png);; @All Files (*)",
+            "Videos (*.mp4 *.m4v *.avi);; @All Files (*)",
             options=QtWidgets.QFileDialog.Options(),
         )
         return files

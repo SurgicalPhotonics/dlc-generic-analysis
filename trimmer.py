@@ -4,6 +4,7 @@ import sys
 from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
 from typing import List, Tuple
 from moviepy.editor import VideoFileClip
+import qtawesome as qta
 
 
 def trim_pool(args: Tuple[str, float, float]) -> None:
@@ -41,18 +42,17 @@ class GoToTime(QtWidgets.QHBoxLayout):
         self.label.setText(f"{self.text} {round(time, 2)}")
 
 
-class TrimWidget(QtWidgets.QWidget):
+class Trimmer(QtWidgets.QWidget):
     keyPressed = QtCore.Signal(int)
 
     def __init__(self, video_paths: List[str]):
-        super(TrimWidget, self).__init__()
+        super(Trimmer, self).__init__()
         self.setWindowTitle("Trim Video(s)")
         self.setLayout(QtWidgets.QVBoxLayout())
         self.video_loaded = False
         self.video_playing = False
         self.video_paths = video_paths
         self.current_video_index = 0
-        self.subclip_duration = 0
         self.top_ui = QtWidgets.QVBoxLayout()
         self.top_ui.setContentsMargins(0, 0, 0, 0)
         self.videos_navigate = QtWidgets.QHBoxLayout()
@@ -83,21 +83,20 @@ class TrimWidget(QtWidgets.QWidget):
         self.play_pause_control = QtWidgets.QHBoxLayout()
         self.play_pause_control.setContentsMargins(0, 0, 0, 0)
         self.fast_reverse_button = QtWidgets.QPushButton()
-        self.fast_reverse_button.setIcon(
-            self.style().standardIcon(QtWidgets.QStyle.SP_MediaSeekForward)
-        )
+        fr_icon = qta.icon("fa5s.fast-backward")
+        self.fast_reverse_button.setIcon(fr_icon)
         self.fast_reverse_button.clicked.connect(self.on_click_fast_reverse)
         self.play_pause_control.addWidget(self.fast_reverse_button)
+        self.play_icon = qta.icon("fa5s.play", )
+        self.pause_icon = qta.icon("fa5s.pause")
         self.play_pause_button = QtWidgets.QPushButton()
-        self.play_pause_button.setIcon(
-            self.style().standardIcon(QtWidgets.QStyle.SP_MediaPlay)
-        )
+        self.play_pause_button.setIcon(self.play_icon)
         self.play_pause_button.clicked.connect(self.on_click_play_pause)
         self.play_pause_control.addWidget(self.play_pause_button)
+        ff_icon = qta.icon("fa5s.fast-forward")
         self.fast_forward_button = QtWidgets.QPushButton()
-        self.fast_reverse_button.setIcon(
-            self.style().standardIcon(QtWidgets.QStyle.SP_MediaSeekBackward)
-        )
+        self.fast_forward_button.setIcon(ff_icon)
+
         self.fast_forward_button.clicked.connect(self.on_click_fast_forward)
         self.play_pause_control.addWidget(self.fast_forward_button)
         self.trim_buttons = QtWidgets.QHBoxLayout()
@@ -112,9 +111,11 @@ class TrimWidget(QtWidgets.QWidget):
         self.slider.setRange(0, 0)
         self.slider.sliderMoved.connect(self.on_slider_move)
         self.goto_start = GoToTime("Start Time")
+        self.goto_start.goto_button.clicked.connect(self.on_goto_start)
         self.goto_end = GoToTime("End Time")
+        self.goto_end.goto_button.clicked.connect(self.on_goto_end)
         self.subclip_duration_label = QtWidgets.QLabel(
-            f"Sub-clip Duration {self.subclip_duration}"
+            f"Sub-clip Duration {0}"
         )
         self.finish_buttom = QtWidgets.QPushButton("Finish")
         self.finish_buttom.clicked.connect(self.on_click_finish)
@@ -159,10 +160,8 @@ class TrimWidget(QtWidgets.QWidget):
         self.filename_label.setText(os.path.split(path)[1])
         self.filename_label.resize(self.filename_label.sizeHint())
         self.trim_end[self.current_video_index] = self.player.duration()
-        subclip_duration = (
-            self.trim_end[self.current_video_index]
-            - self.trim_start[self.current_video_index]
-        ) / 1000
+        subclip_duration = (self.trim_end[self.current_video_index] / 1000
+            - self.trim_start[self.current_video_index] / 1000)
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
 
     def on_click_previous_video(self, e):
@@ -206,29 +205,31 @@ class TrimWidget(QtWidgets.QWidget):
     def on_click_trim_start(self, e):
         print(f"current position {self.player.position()}")
         self.trim_start[self.current_video_index] = self.player.position()
-        if self.trim_end < self.trim_start:
-            self.trim_end = self.trim_start
         self.goto_start.update_label(self.trim_start[self.current_video_index] / 1000)
+
+        if self.trim_end[self.current_video_index] < self.trim_start[self.current_video_index]:
+            self.trim_end[self.current_video_index] = self.trim_start[self.current_video_index]
         subclip_duration = (
-            self.trim_end[self.current_video_index]
-            - self.trim_start[self.current_video_index]
-        ) / 1000
+            self.trim_end[self.current_video_index]/1000
+            - self.trim_start[self.current_video_index]/1000
+        )
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
-        print(f"subclip_duration[{self.current_video_index}] {subclip_duration}")
+        print(f"subclip_duration {subclip_duration}")
 
     def on_click_trim_end(self, e):
         self.trim_end[self.current_video_index] = self.player.position()
         print(f"current position {self.trim_end[self.current_video_index] }")
 
         self.goto_end.update_label(self.trim_end[self.current_video_index] / 1000)
+        if self.trim_start > self.trim_end:
+            self.trim_start = self.trim_end
         subclip_duration = (
             self.trim_end[self.current_video_index] / 1000
             - self.trim_start[self.current_video_index] / 1000
         )
-        print(f"subclip_duration[{self.current_video_index}] {subclip_duration}")
+        print(f"subclip_duration {subclip_duration}")
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
-        if self.trim_start > self.trim_end:
-            self.trim_start = self.trim_end
+
 
     def on_close(self, e):
         self.loop.quit()
@@ -236,13 +237,9 @@ class TrimWidget(QtWidgets.QWidget):
 
     def state_changed(self, e):
         if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
-            self.play_pause_button.setIcon(
-                self.style().standardIcon(QtWidgets.QStyle.SP_MediaPause)
-            )
+            self.play_pause_button.setIcon(self.pause_icon)
         else:
-            self.play_pause_button.setIcon(
-                self.style().standardIcon(QtWidgets.QStyle.SP_MediaPlay)
-            )
+            self.play_pause_button.setIcon(self.play_icon)
 
     def position_changed(self, position):
         self.slider.setValue(position)
@@ -251,17 +248,14 @@ class TrimWidget(QtWidgets.QWidget):
         self.slider.setRange(0, length)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        super(TrimWidget, self).keyPressEvent(event)
+        super(Trimmer, self).keyPressEvent(event)
         self.keyPressed.emit(event.key())
 
-    def on_keypress(self, key):
-        if key == QtCore.Qt.Key_space:
-            if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
-                self.player.pause()
-            else:
-                self.player.play()
-        if key == QtCore.Qt.Key_Forward:
-            pass
+    def on_goto_start(self, e):
+        self.player.setPosition(self.trim_start[self.current_video_index])
+
+    def on_goto_end(self, e):
+        self.player.setPosition(self.trim_end[self.current_video_index])
 
     def on_click_finish(self, e):
         args = zip(self.video_paths, self.trim_start, self.trim_end)
@@ -272,10 +266,15 @@ class TrimWidget(QtWidgets.QWidget):
 
 
 if __name__ == "__main__":
+    if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
+        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+
+    if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
+        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     videos = sys.argv[1:]
     print("video " + videos[0])
     app = QtWidgets.QApplication()
-    window = TrimWidget(videos)
+    window = Trimmer(videos)
     window.resize(1280, 800)
     window.show()
     app.exec_()
