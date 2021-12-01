@@ -35,4 +35,5 @@ class ViewWidget(QtWidgets.QWidget):
         self.navigate_widget = navigate_widget
         self.setLayout(QtWidgets.QGridLayout())
         self.layout().addWidget(self.top_widget, 0, 0)
-        self.layout()
+
+
