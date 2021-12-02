@@ -1,13 +1,15 @@
+import logging
 import multiprocessing
 import os
 import sys
-from PySide6 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
-from gui_objects import PlayPause
+from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from PySide2.QtCore import Qt
+from .gui_objects import PlayPause
 from typing import List, Tuple
 from moviepy.editor import VideoFileClip
 
 
-def trim_pool(args: Tuple[str, float, float]) -> None:
+def _trim_pool(args: Tuple[str, float, float]) -> None:
     """
     trims a file and writes it to a new file with "_trimmed" appended to the end
     :param args: A tuple of (str, float, float) where str is the video path, the first float is the
@@ -102,7 +104,6 @@ class Trimmer(QtWidgets.QWidget):
         self.finish_buttom.clicked.connect(self.on_click_finish)
         self.trim_control = QtWidgets.QGridLayout()
         self.trim_control.setContentsMargins(0, 0, 0, 0)
-        print(f"veritcal spacing {self.trim_control.verticalSpacing()}")
         x, y = 0, 0
         self.trim_control.addLayout(self.play_pause, 0, 0)
         self.trim_control.addLayout(self.trim_buttons, 0, 2)
@@ -118,11 +119,6 @@ class Trimmer(QtWidgets.QWidget):
         self.trim_control.addWidget(self.subclip_duration_label, x, y)
         y += 1
         self.trim_control.addWidget(self.finish_buttom, x, y)
-        print(
-            f"num rows {self.trim_control.rowCount()} = num columns = {self.trim_control.columnCount()}"
-        )
-        # self.layout().setContentsMargins(0, 0, 0, 0)
-
         self.layout().addLayout(self.top_ui, aligment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.layout().addWidget(self.video_viewer)
         self.layout().addLayout(self.trim_control)
@@ -137,11 +133,7 @@ class Trimmer(QtWidgets.QWidget):
         self.filename_label.setText(os.path.split(path)[1])
         self.filename_label.resize(self.filename_label.sizeHint())
         self.trim_end[self.current_video_index] = self.player.duration()
-        subclip_duration = (
-            self.trim_end[self.current_video_index] / 1000
-            - self.trim_start[self.current_video_index] / 1000
-        )
-        self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
+        self.update_subclip_duration()
 
     def on_click_previous_video(self, e):
         if self.current_video_index > 0:
@@ -161,20 +153,20 @@ class Trimmer(QtWidgets.QWidget):
                 self.next_video_button.setEnabled(False)
             self.load_video(self.video_paths[self.current_video_index])
 
-    def on_click_play_pause(self, e):
-        print(f"state = {self.player.state()}")
+    def on_click_play_pause(self):
+        logging.info(f"state = {self.player.state()}")
         if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
             self.player.pause()
-            print("pause")
+            logging.info("pause")
         else:
             self.player.play()
-            print("play")
+            logging.info("play")
 
-    def on_click_fast_forward(self, e):
+    def on_click_fast_forward(self):
         if self.player.state() != QtMultimedia.QMediaPlayer.StoppedState:
             self.player.setPosition(self.player.position() + 1000)
 
-    def on_click_fast_reverse(self, e):
+    def on_click_fast_reverse(self):
         if self.player.state() != QtMultimedia.QMediaPlayer.StoppedState:
             self.player.setPosition(self.player.position() - 1000)
 
@@ -182,7 +174,7 @@ class Trimmer(QtWidgets.QWidget):
         self.player.setPosition(position)
 
     def on_click_trim_start(self, e):
-        print(f"current position {self.player.position()}")
+        logging.info(f"current position {self.player.position()}")
         self.trim_start[self.current_video_index] = self.player.position()
         self.goto_start.update_label(self.trim_start[self.current_video_index] / 1000)
 
@@ -192,21 +184,20 @@ class Trimmer(QtWidgets.QWidget):
             self.trim_end[self.current_video_index] / 1000
             - self.trim_start[self.current_video_index] / 1000
         )
-        self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
-        print(f"subclip_duration {subclip_duration}")
+        self.update_subclip_duration()
 
     def on_click_trim_end(self, e):
         self.trim_end[self.current_video_index] = self.player.position()
-        print(f"current position {self.trim_end[self.current_video_index] }")
+        logging.info(f"current position {self.trim_end[self.current_video_index] }")
 
         self.goto_end.update_label(self.trim_end[self.current_video_index] / 1000)
         if self.trim_start > self.trim_end:
             self.trim_start = self.trim_end
-        subclip_duration = (
-            self.trim_end[self.current_video_index] / 1000
-            - self.trim_start[self.current_video_index] / 1000
-        )
-        print(f"subclip_duration {subclip_duration}")
+        self.update_subclip_duration()
+
+    def update_subclip_duration(self):
+        subclip_duration = (round(self.trim_end[self.current_video_index] / 1000 - self.trim_start[self.current_video_index] / 1000, 1))
+        logging.info(f"subclip_duration {subclip_duration}")
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
 
     def on_close(self, e):
@@ -215,9 +206,9 @@ class Trimmer(QtWidgets.QWidget):
 
     def state_changed(self, e):
         if self.player.state() == QtMultimedia.QMediaPlayer.PlayingState:
-            self.play_pause_button.setIcon(self.pause_icon)
+            self.play_pause.play_pause_button.setIcon(self.play_pause.pause_icon)
         else:
-            self.play_pause_button.setIcon(self.play_icon)
+            self.play_pause.play_pause_button.setIcon(self.play_pause.play_icon)
 
     def position_changed(self, position):
         self.slider.setValue(position)
@@ -225,9 +216,14 @@ class Trimmer(QtWidgets.QWidget):
     def duration_changed(self, length):
         self.slider.setRange(0, length)
 
-    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        super(Trimmer, self).keyPressEvent(event)
-        self.keyPressed.emit(event.key())
+    def keyPressEvent(self, e) -> None:
+        key = e.key
+        if key == Qt.Key_Space:
+            self.on_click_play_pause()
+        if key == Qt.Key_Forward:
+            self.on_click_fast_forward()
+        if key == Qt.Key_Back:
+            self.on_click_fast_reverse()
 
     def on_goto_start(self, e):
         self.player.setPosition(self.trim_start[self.current_video_index])
@@ -238,8 +234,8 @@ class Trimmer(QtWidgets.QWidget):
     def on_click_finish(self, e):
         args = zip(self.video_paths, self.trim_start, self.trim_end)
         with multiprocessing.Pool() as pool:
-            pool.imap_unordered(trim_pool, args)
-        print("done")
+            pool.imap_unordered(_trim_pool, args)
+        logging.info("done")
         app.exit(0)
 
 
@@ -250,7 +246,7 @@ if __name__ == "__main__":
     if hasattr(QtCore.Qt, "AA_UseHighDpiPixmaps"):
         QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     videos = sys.argv[1:]
-    print("video " + videos[0])
+    logging.info("video " + videos[0])
     app = QtWidgets.QApplication()
     window = Trimmer(videos)
     window.resize(1280, 800)

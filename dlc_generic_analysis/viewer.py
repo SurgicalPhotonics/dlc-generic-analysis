@@ -4,14 +4,12 @@ from logging import info  # , error, warning
 import numpy as np
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
-from gui_objects import PlayPause
-import gui_utils
-raster_plots = True
+from .gui_objects import PlayPause
+from . import gui_utils
 try:
-    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-    # from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvas
+    from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
 except OSError:
-    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+    from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
     logging.warning("Cairo could not be imported. using raster AGG plots")
 from matplotlib.figure import Figure
 
@@ -27,7 +25,6 @@ class ViewWidget(QtWidgets.QWidget):
         self.matlab_button = QtWidgets.QPushButton("Export to MATLAB")
         self.convert_button = QtWidgets.QPushButton("Convert to MM")
         top_layout = QtWidgets.QHBoxLayout()
-        # top_layout.setContentsMargins(10, 0, 10, 0)
         top_layout.addWidget(self.load_file_button)
         top_layout.addWidget(self.matlab_button)
         top_layout.addWidget(self.convert_button)
@@ -55,8 +52,6 @@ class ViewWidget(QtWidgets.QWidget):
         self.video_player.setVideoOutput(self.video_viewer)
         self.navigate_layout = navigate_layout
         self.setLayout(QtWidgets.QGridLayout())
-        # self.layout().setContentsMargins(0, 0, 0, 0)
-        # self.layout().setMargin(10)
         self.layout().addLayout(self.top_layout, 0, 0)
         self.layout().addLayout(self.content_layout, 1, 0)
         self.layout().addLayout(self.navigate_layout, 2, 0)
@@ -106,29 +101,9 @@ class ViewWidget(QtWidgets.QWidget):
         self.setMinimumWidth(int(self.width()/2))
 
 
-class MplCanvasWidget(FigureCanvas):
+class MplCanvasWidget(FigureCanvasQT):
     def __init__(self):
         self.fig = Figure()
-        FigureCanvas.__init__(self, self.fig)
+        FigureCanvasQT.__init__(self, self.fig)
 
-
-if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
-    if hasattr(QtCore.Qt, "AA_EnableHighDpiScaling"):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
-
-    if hasattr(QtCore.Qt, "AA_UseHighDpiPixmaps"):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
-
-    app = QtWidgets.QApplication()
-    window = ViewWidget()
-    plots = MplCanvasWidget()
-    ax = plots.fig.add_subplot()
-    data = np.linspace(0, 100, num=50)
-    ax.plot(data)
-    window.content_layout.addWidget(plots)
-    window.load_video(sys.argv[1])
-    window.setBaseSize(window.sizeHint().width(), window.sizeHint().height())
-    window.show()
-    app.exec_()
 
