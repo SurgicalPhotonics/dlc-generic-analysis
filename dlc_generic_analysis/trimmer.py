@@ -1,10 +1,10 @@
 import multiprocessing
 import os
 import sys
-from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from PySide6 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from gui_objects import PlayPause
 from typing import List, Tuple
 from moviepy.editor import VideoFileClip
-import qtawesome as qta
 
 
 def trim_pool(args: Tuple[str, float, float]) -> None:
@@ -22,7 +22,7 @@ def trim_pool(args: Tuple[str, float, float]) -> None:
 
 
 class GoToTime(QtWidgets.QHBoxLayout):
-    def __init__(self, text: str, time: float = 0):
+    def __init__(self, text: str = "", time: float = 0):
         """
         A button that says go to with an editable label
         :param text: the text of the label
@@ -32,7 +32,8 @@ class GoToTime(QtWidgets.QHBoxLayout):
         self.text = text
         self.setContentsMargins(0, 0, 0, 0)
         self.setMargin(0)
-        self.label = QtWidgets.QLabel(f"{text} {round(time, 2)}")
+        if text != "":
+            self.label = QtWidgets.QLabel(f"{text} {round(time, 2)}")
         # self.label.setFixedWidth(100)
         self.addWidget(self.label)
         self.goto_button = QtWidgets.QPushButton("Go To")
@@ -65,40 +66,22 @@ class Trimmer(QtWidgets.QWidget):
             self.next_video_button.setDisabled(True)
         self.next_video_button.clicked.connect(self.on_click_next_video)
         self.videos_navigate.addWidget(self.next_video_button)
+        self.filename_label = QtWidgets.QLabel(" ")
+        self.filename_label.setMargin(0)
+        self.videos_navigate.setContentsMargins(0, 0, 0, 0)
         self.top_ui.addLayout(self.videos_navigate)
-        self.filename_label = QtWidgets.QLabel("")
-        self.filename_label.resize(self.filename_label.sizeHint())
-        # self.top_ui.addWidget(self.filename_label)
+        self.top_ui.setMargin(0)
         self.video_viewer = QtMultimediaWidgets.QVideoWidget()
-        self.video_viewer.resize(QtCore.QSize(640, 360))
         self.player = QtMultimedia.QMediaPlayer()
         self.player.setMuted(True)
-
         self.trim_start = [0] * len(
             self.video_paths
         )  # the beginning point for the trim in milliseconds
-        self.trim_end = [0] * len(
-            self.video_paths
-        )  # the end point for the trim in milliseconds
-        self.play_pause_control = QtWidgets.QHBoxLayout()
-        self.play_pause_control.setContentsMargins(0, 0, 0, 0)
-        self.fast_reverse_button = QtWidgets.QPushButton()
-        fr_icon = qta.icon("fa5s.fast-backward")
-        self.fast_reverse_button.setIcon(fr_icon)
-        self.fast_reverse_button.clicked.connect(self.on_click_fast_reverse)
-        self.play_pause_control.addWidget(self.fast_reverse_button)
-        self.play_icon = qta.icon("fa5s.play", )
-        self.pause_icon = qta.icon("fa5s.pause")
-        self.play_pause_button = QtWidgets.QPushButton()
-        self.play_pause_button.setIcon(self.play_icon)
-        self.play_pause_button.clicked.connect(self.on_click_play_pause)
-        self.play_pause_control.addWidget(self.play_pause_button)
-        ff_icon = qta.icon("fa5s.fast-forward")
-        self.fast_forward_button = QtWidgets.QPushButton()
-        self.fast_forward_button.setIcon(ff_icon)
-
-        self.fast_forward_button.clicked.connect(self.on_click_fast_forward)
-        self.play_pause_control.addWidget(self.fast_forward_button)
+        self.trim_end = [0] * len(self.video_paths)  # the end point for the trim in milliseconds
+        self.play_pause = PlayPause()
+        self.play_pause.fast_reverse_button.clicked.connect(self.on_click_fast_reverse)
+        self.play_pause.play_pause_button.clicked.connect(self.on_click_play_pause)
+        self.play_pause.fast_forward_button.clicked.connect(self.on_click_fast_forward)
         self.trim_buttons = QtWidgets.QHBoxLayout()
         self.trim_buttons.setContentsMargins(0, 0, 0, 0)
         self.trim_start_button = QtWidgets.QPushButton("Trim Start")
@@ -114,16 +97,14 @@ class Trimmer(QtWidgets.QWidget):
         self.goto_start.goto_button.clicked.connect(self.on_goto_start)
         self.goto_end = GoToTime("End Time")
         self.goto_end.goto_button.clicked.connect(self.on_goto_end)
-        self.subclip_duration_label = QtWidgets.QLabel(
-            f"Sub-clip Duration {0}"
-        )
+        self.subclip_duration_label = QtWidgets.QLabel(f"Sub-clip Duration {0}")
         self.finish_buttom = QtWidgets.QPushButton("Finish")
         self.finish_buttom.clicked.connect(self.on_click_finish)
         self.trim_control = QtWidgets.QGridLayout()
         self.trim_control.setContentsMargins(0, 0, 0, 0)
         print(f"veritcal spacing {self.trim_control.verticalSpacing()}")
         x, y = 0, 0
-        self.trim_control.addLayout(self.play_pause_control, 0, 0)
+        self.trim_control.addLayout(self.play_pause, 0, 0)
         self.trim_control.addLayout(self.trim_buttons, 0, 2)
         y = 0
         x += 1
@@ -142,9 +123,7 @@ class Trimmer(QtWidgets.QWidget):
         )
         # self.layout().setContentsMargins(0, 0, 0, 0)
 
-        self.layout().addLayout(
-            self.top_ui, aligment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter
-        )
+        self.layout().addLayout(self.top_ui, aligment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
         self.layout().addWidget(self.video_viewer)
         self.layout().addLayout(self.trim_control)
         self.player.setVideoOutput(self.video_viewer)
@@ -154,14 +133,14 @@ class Trimmer(QtWidgets.QWidget):
         self.load_video(self.video_paths[self.current_video_index])
 
     def load_video(self, path):
-        self.player.setMedia(
-            QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path))
-        )
+        self.player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
         self.filename_label.setText(os.path.split(path)[1])
         self.filename_label.resize(self.filename_label.sizeHint())
         self.trim_end[self.current_video_index] = self.player.duration()
-        subclip_duration = (self.trim_end[self.current_video_index] / 1000
-            - self.trim_start[self.current_video_index] / 1000)
+        subclip_duration = (
+            self.trim_end[self.current_video_index] / 1000
+            - self.trim_start[self.current_video_index] / 1000
+        )
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
 
     def on_click_previous_video(self, e):
@@ -210,8 +189,8 @@ class Trimmer(QtWidgets.QWidget):
         if self.trim_end[self.current_video_index] < self.trim_start[self.current_video_index]:
             self.trim_end[self.current_video_index] = self.trim_start[self.current_video_index]
         subclip_duration = (
-            self.trim_end[self.current_video_index]/1000
-            - self.trim_start[self.current_video_index]/1000
+            self.trim_end[self.current_video_index] / 1000
+            - self.trim_start[self.current_video_index] / 1000
         )
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
         print(f"subclip_duration {subclip_duration}")
@@ -229,7 +208,6 @@ class Trimmer(QtWidgets.QWidget):
         )
         print(f"subclip_duration {subclip_duration}")
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
-
 
     def on_close(self, e):
         self.loop.quit()
@@ -266,10 +244,10 @@ class Trimmer(QtWidgets.QWidget):
 
 
 if __name__ == "__main__":
-    if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
+    if hasattr(QtCore.Qt, "AA_EnableHighDpiScaling"):
         QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 
-    if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
+    if hasattr(QtCore.Qt, "AA_UseHighDpiPixmaps"):
         QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
     videos = sys.argv[1:]
     print("video " + videos[0])
