@@ -116,12 +116,13 @@ class Analysis(ABC):
         self.datastore[name] = angle_arr
         print("Successfully calculated angle", name, "between lines", line1_name, "and", line2_name)
 
-    def calc_avg(self, name, data_name_arr):
+    def calc_avg(self, name: str, data_name_arr):
         """
         Calculate the vectorized average of several pieces of data.
         Parameters:
-            name (str): identifier for the resulting data
-            data_name_arr (str list): list of identifiers for the input
+            name: str
+                identifier for the resulting data
+            data_name_arr: list of identifiers for the input
                                       data
 
         Returns:
@@ -162,4 +163,25 @@ class Analysis(ABC):
 
     @abstractmethod
     def analyze(self, video_path: str) -> (str, str):
-        print("running analysis")
+        """
+
+        :param video_path:
+        :return: video_path, data_path: video_path: the path to the videof with analysis drawn on it.
+        data_path: the path to the data generated from the analysis
+        """
+
+
+class ATest(Analysis):
+    def __init__(self, h5, dlc_scorer):
+        Analysis.__init__(self, h5, dlc_scorer)
+
+    def analyze(self, video_path: str) -> (str, str):
+        pass
+
+
+if __name__ == "__main__":
+    test = ATest(
+        "/Users/louisadamian/Desktop/aemotrics/CompleteFlaccid1_trimmed_croppedDLC_resnet50_Aemotrics_V3Jan20shuffle1_600000.h5",
+        "DLC_resnet50_Aemotrics_V3Jan20shuffle1_600000",
+    )
+    test.analyze("/Users/louisadamian/Desktop/aemotrics/CompleteFlaccid1.mp4")
