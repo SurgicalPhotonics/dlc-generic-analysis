@@ -1,5 +1,5 @@
-import logging
 from logging import info  # , error, warning
+from abc import abstractmethod, ABCMeta
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
@@ -9,12 +9,12 @@ try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
 except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
-
-    logging.warning("Cairo could not be imported. using raster AGG plots " + str(e))
+    info("Cairo could not be imported. using raster AGG plots " + str(e))
 from matplotlib.figure import Figure
 
 
-class ViewWidget(QtWidgets.QWidget):
+class ViewWidget(QtWidgets.QWidget, ABCMeta):
+
     def __init__(self):
         super(ViewWidget, self).__init__()
         self.txt = QtWidgets.QLabel("Frame #")
@@ -63,6 +63,7 @@ class ViewWidget(QtWidgets.QWidget):
             info("play icon")
             self._play_pause.play_pause_button.setIcon(self._play_pause.play_icon)
 
+    @abstractmethod
     def position_changed(self, position):
         self._scrub_bar.setValue(position)
 
@@ -89,18 +90,21 @@ class ViewWidget(QtWidgets.QWidget):
     def on_slider_move(self, position):
         self._video_player.setPosition(position)
 
+    @abstractmethod
     def on_load_video(self):
         video = gui_utils.open_files(self, "Select File to View")
-        logging.info("Loading " + video)
+        info("Loading " + video)
         self.load_video(video)
 
     def load_video(self, path):
         self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
         self.setMinimumWidth(int(self.width() / 2))
 
+    @abstractmethod
     def pause(self):
         self._video_player.pause()
 
+    @abstractmethod
     def play(self):
         self._video_player.play()
 
