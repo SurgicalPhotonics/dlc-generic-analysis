@@ -1,10 +1,9 @@
 from typing import List
 from qtpy import QtWidgets
-# from PySide6 import QtWidgets
 
 
 def open_files(
-        obj: QtWidgets.QWidget, text: str, types_name: str = "Videos", file_types: List[str] = None
+    obj: QtWidgets.QWidget, text: str, types_name: str = "Videos", file_types: List[str] = None
 ):
     if file_types is None:
         file_types = ["mp4", "avi", "m4v"]

@@ -1,11 +1,9 @@
-import sys
-from qtpy import QtWidgets, QtCore, QtGui
-from trimmer import Trimmer
-from abc import ABC, abstractmethod
-import video_tools
+from qtpy import QtWidgets
+from .trimmer import Trimmer
+from abc import abstractmethod
 
 
-class MainWidget(QtWidgets.QWidget, ABC):
+class MainWidget(QtWidgets.QWidget):
     def __init__(self, model_path):
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
@@ -35,32 +33,3 @@ class MainWidget(QtWidgets.QWidget, ABC):
         vids = self.open_files("Select videos to trim")
         trimmer = Trimmer(vids)
         trimmer.show()
-
-    def open_dir(self, text):
-        files_dir, _ = QtWidgets.QFileDialog.getExistingDirectory(
-            self,
-            text,
-        )
-        return files_dir
-
-    def open_files(self, text, files=["mp4", "avi"]):
-        # Opens a directory using File Dialog
-        files, _ = QtWidgets.QFileDialog.getOpenFileNames(
-            self,
-            text,
-            "",
-            "Videos (*.mp4 *.m4v *.avi);; @All Files (*)",
-            options=QtWidgets.QFileDialog.Options(),
-        )
-        return files
-
-
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(MainWindow, self).__init__()
-
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
-    app.exec_()

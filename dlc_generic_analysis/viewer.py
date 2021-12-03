@@ -6,11 +6,13 @@ from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
 from . import gui_utils
+
 try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
-except OSError:
+except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
-    logging.warning("Cairo could not be imported. using raster AGG plots")
+
+    logging.warning("Cairo could not be imported. using raster AGG plots " + str(e))
 from matplotlib.figure import Figure
 
 
@@ -38,7 +40,7 @@ class ViewWidget(QtWidgets.QWidget):
         self.scrub_bar = QtWidgets.QSlider(orientation=Qt.Horizontal)
         self.scrub_bar.sliderMoved.connect(self.on_slider_move)
         navigate_layout = QtWidgets.QGridLayout()
-        navigate_layout.addLayout(self.play_pause,  0, 0)
+        navigate_layout.addLayout(self.play_pause, 0, 0)
         navigate_layout.addWidget(self.scrub_bar)
         self.content_layout = QtWidgets.QHBoxLayout()
         self.video_player = QtMultimedia.QMediaPlayer()
@@ -98,12 +100,10 @@ class ViewWidget(QtWidgets.QWidget):
 
     def load_video(self, path):
         self.video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
-        self.setMinimumWidth(int(self.width()/2))
+        self.setMinimumWidth(int(self.width() / 2))
 
 
 class MplCanvasWidget(FigureCanvasQT):
     def __init__(self):
         self.fig = Figure()
         FigureCanvasQT.__init__(self, self.fig)
-
-

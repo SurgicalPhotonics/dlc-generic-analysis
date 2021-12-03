@@ -196,7 +196,11 @@ class Trimmer(QtWidgets.QWidget):
         self.update_subclip_duration()
 
     def update_subclip_duration(self):
-        subclip_duration = (round(self.trim_end[self.current_video_index] / 1000 - self.trim_start[self.current_video_index] / 1000, 1))
+        subclip_duration = round(
+            self.trim_end[self.current_video_index] / 1000
+            - self.trim_start[self.current_video_index] / 1000,
+            1,
+        )
         logging.info(f"subclip_duration {subclip_duration}")
         self.subclip_duration_label.setText(f"Sub-clip Duration {subclip_duration}")
 

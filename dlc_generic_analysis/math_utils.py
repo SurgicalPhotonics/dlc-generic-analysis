@@ -7,13 +7,10 @@ def regress(bp_points, frame):
     # print("Regressing frame", frame)
     x_arr = []
     y_arr = []
-
     ind_to_delete = np.array([], dtype=int)
-
     for i, bp in enumerate(bp_points):
         x_arr.append(bp["x"][frame])
         y_arr.append(bp["y"][frame])
-
         if bp["likelihood"][frame] < 0.99:
             ind_to_delete = np.append(ind_to_delete, i)
 
