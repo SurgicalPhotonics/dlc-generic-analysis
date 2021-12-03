@@ -1,5 +1,4 @@
 import logging
-import sys
 from logging import info  # , error, warning
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
@@ -55,7 +54,6 @@ class ViewWidget(QtWidgets.QWidget):
         self.layout().addLayout(self._top_layout, 0, 0)
         self.layout().addLayout(self.content_layout, 1, 0)
         self.layout().addLayout(self._navigate_layout, 2, 0)
-        self.load_video(sys.argv[1])
 
     def state_changed(self):
         if self._video_player.state() == QtMultimedia.QMediaPlayer.PlayingState:
