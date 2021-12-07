@@ -9,12 +9,12 @@ try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
 except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
+
     info("Cairo could not be imported. using raster AGG plots " + str(e))
 from matplotlib.figure import Figure
 
 
 class ViewWidget(QtWidgets.QWidget, ABCMeta):
-
     def __init__(self):
         super(ViewWidget, self).__init__()
         self.txt = QtWidgets.QLabel("Frame #")
@@ -109,10 +109,10 @@ class ViewWidget(QtWidgets.QWidget, ABCMeta):
         self._video_player.play()
 
     def ms_to_frame(self, ms):
-        return ms/1000 * self.frame_rate
+        return ms / 1000 * self.frame_rate
 
     def frame_to_ms(self, frame):
-        return frame/self.frame_rate * 1000
+        return frame / self.frame_rate * 1000
 
 
 class MplCanvasWidget(FigureCanvasQT):
