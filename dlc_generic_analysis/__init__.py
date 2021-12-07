@@ -4,15 +4,14 @@ except ImportError:
     __version__ = "unknown"
 
 from .dlc_generic_analysis import MainWidget
+from .trimmer import Trimmer
 from . import (
     analysis,
     dlc,
-    dlc_generic_analysis,
     geometries,
     gui_objects,
     gui_utils,
     math_utils,
-    trimmer,
     utils,
     video_tools,
     viewer,
