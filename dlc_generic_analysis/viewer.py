@@ -14,7 +14,7 @@ except (OSError, ImportError) as e:
 from matplotlib.figure import Figure
 
 
-class ViewWidget(QtWidgets.QWidget, ABCMeta):
+class ViewWidget(QtWidgets.QWidget):
     def __init__(self):
         super(ViewWidget, self).__init__()
         self.txt = QtWidgets.QLabel("Frame #")
@@ -67,6 +67,7 @@ class ViewWidget(QtWidgets.QWidget, ABCMeta):
     def position_changed(self, position):
         self._scrub_bar.setValue(position)
 
+    @abstractmethod
     def duration_changed(self, length):
         self._scrub_bar.setRange(0, length)
 
@@ -96,6 +97,7 @@ class ViewWidget(QtWidgets.QWidget, ABCMeta):
         info("Loading " + video)
         self.load_video(video)
 
+    @abstractmethod
     def load_video(self, path):
         self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
         self.setMinimumWidth(int(self.width() / 2))
