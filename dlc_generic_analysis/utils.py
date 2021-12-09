@@ -95,9 +95,9 @@ def download_model(url: str, dest: str) -> str:
     if tarfile.is_tarfile(model_tar):
         ext = os.path.splitext(model_tar)[1]
         if ext == "gz" or ext == ".gz":
-            tar = tarfile.open(model_tar, 'r:gz')
+            tar = tarfile.open(model_tar, "r:gz")
         elif ext == "xz" or ext == ".xz":
-            tar = tarfile.open(model_tar, 'r:gz')
+            tar = tarfile.open(model_tar, "r:gz")
         else:
             raise ValueError("File must be .tar.gz or tar.xz")
     else:
@@ -107,4 +107,3 @@ def download_model(url: str, dest: str) -> str:
         os.mkdir(name)
     tar.extractall(name)
     return name
-
