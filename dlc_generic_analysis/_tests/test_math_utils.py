@@ -4,11 +4,12 @@ from dlc_generic_analysis import math_utils
 
 
 def test_distance():
-    data = [[0, 1, 2], [6, 5, 3]]
-    data1 = [[7, 2, 3], [8, 4, 3]]
-    bp1 = pandas.DataFrame(data, columns=["x", "y"])
-    bp2 = pandas.DataFrame(data1, columns=["x", "y"])
+    data = [[0, 1, 2], [7, 5, 3]]
+    data1 = [[6, 3, 9], [8, 4, 3]]
+    bp1 = pandas.DataFrame(data, columns=["x", "y", "confidence"], dtype=np.float_)
+    bp2 = pandas.DataFrame(data1, columns=["x", "y", "confidence"])
     dist = math_utils.distance(bp1, bp2, 1)
+    print(f"dist = {dist}")
     assert dist == np.sqrt(2)
 
 

@@ -1,0 +1,26 @@
+name: tests
+
+on: push
+ branches:
+      - main
+      - dev/main
+ pull_request:
+   branches:
+     - main
+     - dev/main
+ workflow_dispatch:
+   jobs:
+     test:
+       ${{ matrix.platform }} py${{ matrix.python-version }}
+     runs-on: ${{ matrix.platform }}
+     strategy:
+       matrix:
+         platform: [ ubuntu-latest, windows-latest, macos-latest ]
+         python-version: [ "3.8", "3.9" ]
+
+     steps:
+       - uses: actions/checkout@v2
+       - name: Set up Python ${{ matrix.python-version }}
+         uses: actions/setup-python@v2
+         with:
+           python-version: ${{ matrix.python-version }}

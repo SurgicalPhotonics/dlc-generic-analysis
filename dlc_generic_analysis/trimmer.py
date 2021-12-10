@@ -36,6 +36,8 @@ class GoToTime(QtWidgets.QHBoxLayout):
         self.setMargin(0)
         if text != "":
             self.label = QtWidgets.QLabel(f"{text} {round(time, 2)}")
+        else:
+            self.label = QtWidgets.QLabel("")
         # self.label.setFixedWidth(100)
         self.addWidget(self.label)
         self.goto_button = QtWidgets.QPushButton("Go To")
@@ -147,11 +149,11 @@ class Trimmer(QtWidgets.QWidget):
     def on_click_next_video(self, e):
         if self.current_video_index < len(self.video_paths) - 1:
             self.current_video_index += 1
+            self.load_video(self.video_paths[self.current_video_index])
             if self.current_video_index > 0:
                 self.previous_video_button.setEnabled(True)
             if self.current_video_index == len(self.video_paths) - 1:
                 self.next_video_button.setEnabled(False)
-            self.load_video(self.video_paths[self.current_video_index])
 
     def on_click_play_pause(self):
         logging.info(f"state = {self.player.state()}")

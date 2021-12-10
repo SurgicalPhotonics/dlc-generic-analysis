@@ -11,9 +11,12 @@ def test_dist():
 
 def test_point_array():
     data = [[0, 1, 2], [3, 4, 5]]
-    df = pandas.DataFrame(data, columns=["a", "b", "c"])
+    index = pandas.MultiIndex.from_product(
+        [["Glab"], ["x", "y", "likelihood"]], names=["scorer", "coords"]
+    )
+    df = pandas.DataFrame(data, columns=index)
     print(df)
-    arr = utils.point_array(df, ["a"])
+    arr = utils.point_array(df, ["Glab"])
     np.array_equal(arr, np.array([[0, 3]]))
 
 
