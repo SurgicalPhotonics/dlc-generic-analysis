@@ -1,5 +1,6 @@
+import os.path
 from logging import info  # , error, warning
-from abc import abstractmethod, ABCMeta
+from abc import abstractmethod
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
@@ -22,11 +23,9 @@ class ViewWidget(QtWidgets.QWidget):
         self.last_frame = -1
         self.playing = False
         self.loaded = False
-        self._load_file_button = QtWidgets.QPushButton("Load File")
         self._matlab_button = QtWidgets.QPushButton("Export to MATLAB")
         self._convert_button = QtWidgets.QPushButton("Convert to MM")
         self._top_layout = QtWidgets.QHBoxLayout()
-        self._top_layout.addWidget(self._load_file_button)
         self._top_layout.addWidget(self._matlab_button)
         self._top_layout.addWidget(self._convert_button)
         self._play_pause = PlayPause()
@@ -99,8 +98,9 @@ class ViewWidget(QtWidgets.QWidget):
 
     @abstractmethod
     def load_video(self, path):
-        self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
-        self.setMinimumWidth(int(self.width() / 2))
+        if os.path.isfile(path):
+            self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
+            self.setMinimumWidth(int(self.width() / 2))
 
     @abstractmethod
     def pause(self):
@@ -115,9 +115,3 @@ class ViewWidget(QtWidgets.QWidget):
 
     def frame_to_ms(self, frame):
         return frame / self.frame_rate * 1000
-
-
-class MplCanvasWidget(FigureCanvasQT):
-    def __init__(self):
-        self.fig = Figure()
-        FigureCanvasQT.__init__(self, self.fig)

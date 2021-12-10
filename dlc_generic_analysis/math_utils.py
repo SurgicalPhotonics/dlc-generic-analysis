@@ -17,7 +17,7 @@ def interpolate_gaps(values, limit=None):
     size of `limit`.
     https://stackoverflow.com/questions/36455083/working-with-nan-values-in-matplotlib
     """
-    values = np.asarray(values)
+    values = np.array(values)
     i = np.arange(values.size)
     valid = np.isfinite(values)
     filled = np.interp(i, i[valid], values[valid])

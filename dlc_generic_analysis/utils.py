@@ -37,16 +37,6 @@ def to_avi(in_path, out_path):
         success, frame = video_cap.read()
 
 
-def read_data(path: str):
-    with open(path, "r") as file:
-        reader = csv.reader(file, delimiter=",")
-        next(reader)
-        data = []
-        for row in reader:
-            data.append(float(row[7]))
-    return data
-
-
 def down_sample(path, height=480):
     """
     downsample videos to be height tall
@@ -76,7 +66,13 @@ def down_sample(path, height=480):
         return name
 
 
-def angle_between_lines(m1, m2):
+def angle_between_lines(m1: float, m2: float):
+    """
+    calculates the angle between 2 lines in degrees
+    :param m1: slope of line 1
+    :param m2: slope of line 2
+    :return:
+    """
     return np.degrees(np.arctan(((m2 - m1) / (1 + m1 * m2))))
 
 
