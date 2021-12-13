@@ -5,7 +5,7 @@ except ImportError:
 
 from .dlc_generic_analysis import MainWidget
 from .trimmer import Trimmer
-from .dlc import analyze
+from .dlc import dlc_analyze
 from . import (
     analysis,
     geometries,

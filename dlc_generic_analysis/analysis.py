@@ -22,7 +22,6 @@ class Analysis(ABC):
             self.end_frame = endframe
         assert self.end_frame > self.start_frame
         self.nframes = self.end_frame - self.start_frame
-
         self.outpath = os.path.split(h5_path)[0]
         self.outpath = os.path.join(h5_path, "analyzed_videos")
 
