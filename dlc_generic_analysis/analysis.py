@@ -27,10 +27,9 @@ class Analysis(ABC):
         self.outpath = os.path.join(h5_path, "analyzed_videos")
 
     @abstractmethod
-    def analyze(self, video_path: str) -> (str, str):
-        """
+    def draw(self):
+        pass
 
-        :param video_path:
-        :return: video_path, data_path: video_path: the path to the videof with analysis drawn on it.
-        data_path: the path to the data generated from the analysis
-        """
+    @abstractmethod
+    def write_csv(self):
+        pass

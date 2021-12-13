@@ -8,8 +8,11 @@ class ATest(Analysis):
     def __init__(self, h5, dlc_scorer):
         Analysis.__init__(self, h5, dlc_scorer)
 
-    def analyze(self, video_path: str) -> (str, str):
-        return "a", "b"
+    def draw(self):
+        pass
+
+    def write_csv(self):
+        pass
 
 
 def test_analyze():
