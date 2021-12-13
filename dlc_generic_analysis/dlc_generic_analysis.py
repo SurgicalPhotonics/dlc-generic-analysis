@@ -1,4 +1,5 @@
 from qtpy import QtWidgets
+from qtpy.QtCore import Qt
 from .trimmer import Trimmer
 from abc import abstractmethod
 
@@ -7,6 +8,8 @@ class MainWidget(QtWidgets.QWidget):
     def __init__(self, model_path):
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
+        self.title = QtWidgets.QLabel("")
+        self.layout().addWidget(self.title, Qt.AlignHCenter)
         self.dlc_model_path = model_path
         self.crop_checkbox = QtWidgets.QCheckBox("Crop Videos")
         self.layout().addWidget(self.crop_checkbox)
