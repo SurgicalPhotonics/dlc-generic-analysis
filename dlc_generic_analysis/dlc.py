@@ -3,7 +3,7 @@ import deeplabcut
 from typing import List
 
 
-def analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str], str):
+def dlc_analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str], str):
     """
     DLC analyze videos or a batch of videos with the same file extension. will use the 0th paths extension for encoding
     :param config: the directory containing the config.yaml file

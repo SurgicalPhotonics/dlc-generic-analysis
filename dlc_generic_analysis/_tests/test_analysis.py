@@ -17,7 +17,8 @@ class ATest(Analysis):
 
 def test_analyze():
     index = pandas.MultiIndex.from_product(
-        [["dlc_sc"], ["Glab", "Ment"], ["x", "y", "likelihood"]], names=["scorer", "bodyparts", "coords"]
+        [["dlc_sc"], ["Glab", "Ment"], ["x", "y", "likelihood"]],
+        names=["scorer", "bodyparts", "coords"],
     )
     data = np.array([[0, 1, 2, 3, 4, 5], [6, 7, 8, 1, 2, 3], [4, 5, 6, 7, 8, 9]])
     df = pandas.DataFrame(data, columns=index)
