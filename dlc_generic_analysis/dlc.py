@@ -3,6 +3,7 @@ import deeplabcut
 from typing import List
 from logging import info
 
+
 def dlc_analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str], str):
     """
     DLC analyze videos or a batch of videos with the same file extension. will use the 0th paths extension for encoding
