@@ -38,4 +38,5 @@ def dlc_analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str]
         h5.append(
             os.path.join(dest, os.path.splitext(os.path.split(path)[1])[0] + model_slug + ".h5")
         )
+    deeplabcut.filterpredictions(cfg, paths, videotype=vidtype)
     return h5, model_slug
