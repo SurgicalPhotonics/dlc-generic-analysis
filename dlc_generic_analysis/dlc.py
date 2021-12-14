@@ -1,7 +1,7 @@
 import os.path
 import deeplabcut
 from typing import List
-
+from logging import info
 
 def dlc_analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str], str):
     """
@@ -34,9 +34,11 @@ def dlc_analyze(config: str, paths: List[str], gputouse: int = -1) -> (List[str]
             TFGPUinference=False,
         )
     h5 = []
+
+    deeplabcut.filterpredictions(cfg, paths, videotype=vidtype)
     for path in paths:
         h5.append(
-            os.path.join(dest, os.path.splitext(os.path.split(path)[1])[0] + model_slug + ".h5")
+            os.path.join(dest, os.path.splitext(os.path.split(path)[1])[0] + model_slug + "_filtered" + ".h5")
         )
-    deeplabcut.filterpredictions(cfg, paths, videotype=vidtype)
+    info("analysis done")
     return h5, model_slug
