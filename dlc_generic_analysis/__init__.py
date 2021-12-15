@@ -3,16 +3,21 @@ try:
 except ImportError:
     __version__ = "unknown"
 
-from .dlc_generic_analysis import MainWidget
-from .trimmer import Trimmer
 from .dlc import dlc_analyze
+try:
+    from . import gui_objects, gui_utils, viewer
+    from .trimmer import Trimmer
+    from .dlc_generic_analysis import MainWidget
+
+except (ModuleNotFoundError, ImportError) as e:
+    pass
+
 from . import (
     analysis,
     geometries,
-    gui_objects,
-    gui_utils,
     math_utils,
     utils,
     video_tools,
-    viewer,
 )
+
+
