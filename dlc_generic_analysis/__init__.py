@@ -5,6 +5,7 @@ except ImportError:
 from logging import info
 import matplotlib as mpl
 try:
+    import PySide2
     from . import gui_objects, gui_utils, viewer
     from .trimmer import Trimmer
     from .dlc_generic_analysis import MainWidget
@@ -12,7 +13,6 @@ try:
 except (ModuleNotFoundError, ImportError) as e:
     info("dlc-generic-analysis GUI not loaded")
     mpl.use('agg')
-
 from . import (
     analysis,
     geometries,
