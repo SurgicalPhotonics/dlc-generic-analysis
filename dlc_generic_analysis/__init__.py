@@ -2,15 +2,16 @@ try:
     from ._version import version as __version__
 except ImportError:
     __version__ = "unknown"
-
-from .dlc import dlc_analyze
+from logging import info
+import matplotlib as mpl
 try:
     from . import gui_objects, gui_utils, viewer
     from .trimmer import Trimmer
     from .dlc_generic_analysis import MainWidget
-
+    mpl.use("QtAgg")
 except (ModuleNotFoundError, ImportError) as e:
-    pass
+    info("dlc-generic-analysis GUI not loaded")
+    mpl.use('agg')
 
 from . import (
     analysis,
@@ -19,5 +20,6 @@ from . import (
     utils,
     video_tools,
 )
+from .dlc import dlc_analyze
 
 
