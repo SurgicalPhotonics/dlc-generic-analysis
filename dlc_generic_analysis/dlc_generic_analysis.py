@@ -11,7 +11,6 @@ class MainWidget(QtWidgets.QWidget):
         self.title = QtWidgets.QLabel("")
         self.layout().addWidget(self.title, alignment=Qt.AlignHCenter)
         self.dlc_model_path = model_path
-        self.crop_checkbox = QtWidgets.QCheckBox("Crop Videos")
         self.layout().addWidget(self.crop_checkbox)
         self.analyze_button = QtWidgets.QPushButton("Analyze Videos")
         self.analyze_button.clicked.connect(self.on_click_analyze)

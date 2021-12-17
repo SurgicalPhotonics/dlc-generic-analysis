@@ -2,8 +2,8 @@ import logging
 import multiprocessing
 import os
 import sys
-from PySide2 import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
-from PySide2.QtCore import Qt
+from qtpy import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
 from typing import List, Tuple
 from moviepy.editor import VideoFileClip
