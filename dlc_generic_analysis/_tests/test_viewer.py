@@ -7,16 +7,16 @@ class VW(ViewerWidget):
         super(VW, self).__init__()
 
     def position_changed(self, position):
-        super(VW, self).position_changed(position)
+        super(VW, self)._position_changed(position)
 
     def duration_changed(self, length):
-        super(VW, self).duration_changed(length)
+        super(VW, self)._duration_changed(length)
 
     def on_load_video(self):
         super(VW, self).on_load_video()
 
     def load_video(self, path):
-        super(VW, self).load_video(path)
+        super(VW, self)._load_video(path)
 
     def pause(self):
         super(VW, self).pause()

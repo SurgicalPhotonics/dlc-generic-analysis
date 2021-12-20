@@ -1,14 +1,17 @@
 import numpy as np
 
 
-def interpolate_gaps(values, limit=None):
+def interpolate_gaps(data, limit:int = None) -> np.ndarray:
     """
-
+    interpolates gaps in data series with np.nan
+    :param data: the data to interpolate
+    :param limit: the maximum gap size to fill
+    :return: the fi;;ed data
     """
-    values = np.array(values)
-    i = np.arange(values.size)
-    valid = np.isfinite(values)
-    filled = np.interp(i, i[valid], values[valid])
+    data = np.array(data)
+    i = np.arange(data.size)
+    valid = np.isfinite(data)
+    filled = np.interp(i, i[valid], data[valid])
 
     if limit is not None:
         invalid = ~valid
