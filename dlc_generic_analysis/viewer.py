@@ -15,9 +15,9 @@ except (OSError, ImportError) as e:
 from matplotlib.figure import Figure
 
 
-class ViewWidget(QtWidgets.QWidget):
+class ViewerWidget(QtWidgets.QWidget):
     def __init__(self):
-        super(ViewWidget, self).__init__()
+        super(ViewerWidget, self).__init__()
         self.txt = QtWidgets.QLabel("Frame #")
         self.frame_rate = 1
         self.last_frame = -1
