@@ -1,8 +1,8 @@
-from dlc_generic_analysis.viewer import ViewWidget
+from dlc_generic_analysis.viewer import ViewerWidget
 import numpy as np
 
 
-class VW(ViewWidget):
+class VW(ViewerWidget):
     def __init__(self):
         super(VW, self).__init__()
 

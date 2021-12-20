@@ -25,5 +25,4 @@ def test_analyze():
     path = "test.h5"
     df.to_hdf(path, "dlc_sc")
     at = ATest(path, "dlc_sc")
-    at.analyze("")
     os.remove("test.h5")
