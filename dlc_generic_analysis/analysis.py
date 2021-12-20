@@ -27,8 +27,12 @@ class Analysis(ABC):
 
     @abstractmethod
     def draw(self):
+        """
+        draw geometries from the analysis on the video and return a new video
+        """
         pass
 
     @abstractmethod
     def write_csv(self):
+        """write data from the analysis to a file"""
         pass

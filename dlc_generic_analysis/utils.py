@@ -1,16 +1,21 @@
-import csv
 import os.path
 from typing import Tuple, List
 import numpy as np
+import scipy.spatial.distance
 from pandas import DataFrame
 import cv2
-from tqdm import tqdm
 import urllib.request
 import tarfile
+from scipy import spatial
+from scipy.spatial.distance import euclidean as dist
 
 
-def dist(point1: Tuple[float, float], point2: Tuple[float, float]):
-    return np.sqrt(np.abs(point2[0] - point1[0]) ** 2 + np.abs(point2[1] - point1[1]) ** 2)
+def distance(bp1, bp2, frame):
+    p1 = (bp1["x"][frame], bp1["y"][frame])
+    p2 = (bp2["x"][frame], bp2["y"][frame])
+
+    d = spatial.distance.euclidean(p1, p2)
+    return d
 
 
 def point_array(data_frame: DataFrame, points: List[str]):
@@ -39,7 +44,7 @@ def to_avi(in_path, out_path):
 
 def down_sample(path, height=480):
     """
-    downsample videos to be height tall
+    down samples videos to be height tall
     :param path: the path to the source video
     :param height: the height of the downsampled video
     :return:

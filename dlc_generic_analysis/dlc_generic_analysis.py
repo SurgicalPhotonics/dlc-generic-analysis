@@ -6,6 +6,9 @@ from abc import abstractmethod
 
 class MainWidget(QtWidgets.QWidget):
     def __init__(self):
+        """
+        The Main view of your applications where users will run analysis
+        """
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
         self.title = QtWidgets.QLabel("")

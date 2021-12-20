@@ -4,6 +4,9 @@ import qtawesome as qta
 
 class PlayPause(QtWidgets.QHBoxLayout):
     def __init__(self):
+        """
+        Creates a
+        """
         QtWidgets.QHBoxLayout.__init__(self)
         self.setContentsMargins(0, 0, 0, 0)
         self.fast_reverse_button = QtWidgets.QPushButton()

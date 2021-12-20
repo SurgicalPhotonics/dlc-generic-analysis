@@ -2,7 +2,7 @@ import logging
 import multiprocessing
 import os
 import sys
-from qtpy import QtWidgets, QtCore, QtGui, QtMultimedia, QtMultimediaWidgets
+from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
 from typing import List, Tuple

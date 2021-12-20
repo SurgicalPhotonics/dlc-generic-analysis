@@ -10,13 +10,14 @@ try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
 except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
-
     info("Cairo could not be imported. using raster AGG plots " + str(e))
-from matplotlib.figure import Figure
 
 
 class ViewerWidget(QtWidgets.QWidget):
     def __init__(self):
+        """
+        The viewer for your analyzed data. This window will have your videos and plots
+        """
         super(ViewerWidget, self).__init__()
         self.txt = QtWidgets.QLabel("Frame #")
         self.frame_rate = 1
@@ -63,11 +64,20 @@ class ViewerWidget(QtWidgets.QWidget):
             self._play_pause.play_pause_button.setIcon(self._play_pause.play_icon)
 
     @abstractmethod
-    def position_changed(self, position):
+    def position_changed(self, position) -> None:
+        """
+        Is called every time the frame in the video changes.
+        :param position: the current position in the video in milliseconds
+        :return:
+        """
         self._scrub_bar.setValue(position)
 
-    @abstractmethod
-    def duration_changed(self, length):
+    def duration_changed(self, length) -> None:
+        """
+        called whenever the duration of a video changes IE when a new video is loaded
+        :param length: the length of the video in milliseconds
+        :return: None
+        """
         self._scrub_bar.setRange(0, length)
 
     def on_play_pause(self):
@@ -91,22 +101,14 @@ class ViewerWidget(QtWidgets.QWidget):
         self._video_player.setPosition(position)
 
     @abstractmethod
-    def on_load_video(self):
-        video = gui_utils.open_files(self, "Select File to View")
-        info("Loading " + video)
-        self.load_video(video)
-
-    @abstractmethod
     def load_video(self, path):
         if os.path.isfile(path):
             self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
             self.setMinimumWidth(int(self.width() / 2))
 
-    @abstractmethod
     def pause(self):
         self._video_player.pause()
 
-    @abstractmethod
     def play(self):
         self._video_player.play()
 

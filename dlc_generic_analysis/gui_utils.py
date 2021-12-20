@@ -8,8 +8,8 @@ def open_files(
     if file_types is None:
         file_types = ["mp4", "avi", "m4v"]
     file_types_str = types_name + " ("
-    for ftype in file_types:
-        file_types_str += "*." + ftype + " "
+    for f_type in file_types:
+        file_types_str += "*." + f_type + " "
     file_types_str += ");; @All Files (*)"
     files, _ = QtWidgets.QFileDialog.getOpenFileNames(
         obj,

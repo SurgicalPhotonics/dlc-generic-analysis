@@ -1,6 +1,3 @@
-"""
-Author: Frank Ma and Louis Adamian
-"""
 from typing import Tuple
 
 

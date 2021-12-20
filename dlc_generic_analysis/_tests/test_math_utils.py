@@ -1,6 +1,6 @@
 import pandas
 import numpy as np
-from dlc_generic_analysis import math_utils
+from dlc_generic_analysis import math_utils, utils
 
 
 def test_distance():
@@ -8,7 +8,7 @@ def test_distance():
     data1 = [[6, 3, 9], [8, 4, 3]]
     bp1 = pandas.DataFrame(data, columns=["x", "y", "confidence"], dtype=np.float_)
     bp2 = pandas.DataFrame(data1, columns=["x", "y", "confidence"])
-    dist = math_utils.distance(bp1, bp2, 1)
+    dist = utils.distance(bp1, bp2, 1)
     print(f"dist = {dist}")
     assert dist == np.sqrt(2)
 
