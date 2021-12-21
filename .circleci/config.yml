@@ -1,0 +1,27 @@
+version: 2.1
+
+executors:
+  linux:
+    docker:
+      - image: ubuntu@18.04
+
+orbs:
+  python: circleci/python@1.2
+
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Run tests
+          command: tox
+
+workflows:
+  sample:
+    jobs:
+      - build-and-test
