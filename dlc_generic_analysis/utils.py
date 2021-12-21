@@ -1,20 +1,22 @@
 import os.path
-from typing import Tuple, List
+from typing import List
 import numpy as np
-import scipy.spatial.distance
 from pandas import DataFrame
 import cv2
 import urllib.request
 import tarfile
-from scipy import spatial
-from scipy.spatial.distance import euclidean as dist
+from scipy.spatial.distance import euclidean
 
 
-def distance(bp1, bp2, frame):
+def distance(bp1: DataFrame, bp2: DataFrame, frame: int):
+    """
+    calculates the distance between DataFrame points
+
+    """
     p1 = (bp1["x"][frame], bp1["y"][frame])
     p2 = (bp2["x"][frame], bp2["y"][frame])
 
-    d = spatial.distance.euclidean(p1, p2)
+    d = euclidean(p1, p2)
     return d
 
 

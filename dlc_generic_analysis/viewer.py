@@ -4,7 +4,6 @@ from abc import abstractmethod
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
-from . import gui_utils
 
 try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
@@ -55,7 +54,7 @@ class ViewerWidget(QtWidgets.QWidget):
         self.layout().addLayout(self.content_layout, 1, 0)
         self.layout().addLayout(self._navigate_layout, 2, 0)
 
-    def state_changed(self):
+    def state_changed(self) -> None:
         if self._video_player.state() == QtMultimedia.QMediaPlayer.PlayingState:
             info("pause_icon")
             self._play_pause.play_pause_button.setIcon(self._play_pause.pause_icon)
@@ -80,7 +79,7 @@ class ViewerWidget(QtWidgets.QWidget):
         """
         self._scrub_bar.setRange(0, length)
 
-    def on_play_pause(self):
+    def on_play_pause(self) -> None:
         info(f"state = {self._video_player.state()}")
         if self._video_player.state() == QtMultimedia.QMediaPlayer.PlayingState:
             self.pause()
@@ -89,31 +88,36 @@ class ViewerWidget(QtWidgets.QWidget):
             self.play()
             info("play")
 
-    def on_fast_forward(self):
+    def on_fast_forward(self) -> None:
         if self._video_player.state() != QtMultimedia.QMediaPlayer.StoppedState:
             self._video_player.setPosition(self._video_player.position() + 1000)
 
-    def on_fast_reverse(self):
+    def on_fast_reverse(self) -> None:
         if self._video_player.state() != QtMultimedia.QMediaPlayer.StoppedState:
             self._video_player.setPosition(self._video_player.position() - 1000)
 
-    def on_slider_move(self, position):
+    def on_slider_move(self, position: int) -> None:
         self._video_player.setPosition(position)
 
     @abstractmethod
-    def load_video(self, path):
+    def load_video(self, path: str) -> None:
+        """
+        this function is used to load new videos and load the plots
+        :param path: the path to the video file to load
+        :return: none
+        """
         if os.path.isfile(path):
             self._video_player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(path)))
             self.setMinimumWidth(int(self.width() / 2))
 
-    def pause(self):
+    def pause(self) -> None:
         self._video_player.pause()
 
-    def play(self):
+    def play(self) -> None:
         self._video_player.play()
 
-    def ms_to_frame(self, ms):
+    def ms_to_frame(self, ms: int) -> float:
         return ms / 1000 * self.frame_rate
 
-    def frame_to_ms(self, frame):
+    def frame_to_ms(self, frame: int) -> float:
         return frame / self.frame_rate * 1000

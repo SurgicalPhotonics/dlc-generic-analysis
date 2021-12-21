@@ -52,7 +52,6 @@ class Trimmer(QtWidgets.QWidget):
     def __init__(self, video_paths: List[str]):
         """
         Creates a window that assists the user in trimming the ends off a list of videos
-
         """
         super(Trimmer, self).__init__()
         self.setWindowTitle("Trim Video(s)")

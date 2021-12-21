@@ -4,11 +4,6 @@ import pytest
 import pandas
 
 
-def test_dist():
-    dist = utils.dist((0, 0), (1, 2))
-    assert np.sqrt(1 + 2 ** 2) == pytest.approx(dist)
-
-
 def test_point_array():
     data = [[0, 1, 2], [3, 4, 5]]
     index = pandas.MultiIndex.from_product(

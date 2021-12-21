@@ -25,10 +25,15 @@ class MainWidget(QtWidgets.QWidget):
 
     @abstractmethod
     def on_click_analyze(self):
+        """
+        Runs when the user clicks the analyze button
+        """
         pass
 
     @abstractmethod
     def on_click_view(self):
+        """Runs when the user clicks the view button
+        """
         pass
 
     @abstractmethod
