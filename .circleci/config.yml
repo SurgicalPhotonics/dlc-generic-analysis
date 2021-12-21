@@ -7,7 +7,7 @@ executors:
 
 orbs:
   python: circleci/python@1.2
-
+  codecov: codecov/codecov@1.0.2
 
 jobs:
   build-and-test:
@@ -17,11 +17,14 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
+          command: pip install tox>=3.24.4
       - run:
           name: Run tests
           command: tox
+      - codecov/upload:
+          file: { { coverage_report_filepath } }
 
 workflows:
-  sample:
+  test:
     jobs:
       - build-and-test
