@@ -1,5 +1,4 @@
 from dlc_generic_analysis.viewer import ViewerWidget
-import numpy as np
 
 
 class VW(ViewerWidget):
