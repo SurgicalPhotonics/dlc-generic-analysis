@@ -33,7 +33,6 @@ class GoToTime(QtWidgets.QHBoxLayout):
         super(GoToTime, self).__init__()
         self.text = text
         self.setContentsMargins(0, 0, 0, 0)
-        self.setMargin(0)
         if text != "":
             self.label = QtWidgets.QLabel(f"{text} {round(time, 2)}")
         else:
