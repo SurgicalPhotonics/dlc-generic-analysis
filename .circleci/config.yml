@@ -26,7 +26,7 @@ jobs:
           name: Test
           command: python -m tox
       - codecov/upload:
-          file: './.coverage'
+          file: './coverage.xml'
           token: a7a5df63-codcov-token-4278vh38
 
 workflows:
