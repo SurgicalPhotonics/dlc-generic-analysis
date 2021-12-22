@@ -6,7 +6,6 @@ executors:
       - image: ubuntu@18.04
 
 orbs:
-  python: circleci/python@1.2
   codecov: codecov/codecov@1.0.2
 
 jobs:
@@ -15,19 +14,17 @@ jobs:
       image: ubuntu-2004:202111-01
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
       - run:
           name: Install dependencies
           command: |
             sudo apt-get update
             sudo apt-get install libpulse-mainloop-glib0
-            python3.8 -m pip install --upgrade pip
-            python3.8 -m pip install -e .
-            python3.8 -m pip install tox
+            python3 -m pip install --upgrade pip
+            python3 -m pip install -e .
+            python3 -m pip install tox
       - run:
           name: Test
-          command: python -m tox
+          command: python3 -m tox
       - codecov/upload:
           file: './coverage.xml'
           token: a7a5df63-codcov-token-4278vh38
