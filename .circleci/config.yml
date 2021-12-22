@@ -24,7 +24,7 @@ jobs:
             pip install tox
       -run:
         - name: Test
-          - command: tox
+          - command: python -m tox
       - codecov/upload:
           file: './.coverage'
           token: a7a5df63-codcov-token-4278vh38
