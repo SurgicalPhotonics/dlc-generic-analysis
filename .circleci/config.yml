@@ -22,8 +22,9 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install libpulse-mainloop-glib0
-            pip install -e .
-            pip install tox
+            python3.8 -m pip install --upgrade pip
+            python3.8 -m pip install -e .
+            python3.8 -m pip install tox
       - run:
           name: Test
           command: python -m tox
