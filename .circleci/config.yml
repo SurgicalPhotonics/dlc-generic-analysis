@@ -22,10 +22,9 @@ jobs:
           command: |
             pip install -e .
             pip install tox
-      - run:
-          name: Run tests
-          command: tox
-      -
+      - codecov/upload:
+          file: './coverage/clover.xml'
+          token: a7a5df63-codcov-token-4278vh38
 
 workflows:
   test:
