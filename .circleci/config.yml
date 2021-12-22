@@ -1,30 +1,22 @@
-version: 2.1
-
-executors:
-  linux:
-    docker:
-      - image: ubuntu@18.04
-
-orbs:
-  python: circleci/python@1.2
-  codecov: codecov/codecov@1.0.2
-
 jobs:
-  build-and-test:
+  build:
     docker:
-      - image: cimg/python:3.8
+      - image: circleci/python:3.8.12
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          command: pip install tox>=3.24.4
+      - python/install-packages:
+          args: tox
+          pkg-manager: pip
       - run:
-          name: Run tests
-          command: tox
-      - codecov/upload:
-          file: { { coverage_report_filepath } }
+          command: |
+            python3.8 -m tox
 
+orbs:
+  python: circleci/python@1.1.0
+version: 2.1
 workflows:
-  test:
+  main:
     jobs:
-      - build-and-test
+      - build

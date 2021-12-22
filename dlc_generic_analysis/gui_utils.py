@@ -3,7 +3,10 @@ from qtpy import QtWidgets
 
 
 def open_files(
-    parent: QtWidgets.QWidget, window_name: str, types_name: str = "Videos", file_types: List[str] = None
+    parent: QtWidgets.QWidget,
+    window_name: str,
+    types_name: str = "Videos",
+    file_types: List[str] = None,
 ):
     """
     creates a QfileDialog with text label for types_name file_types

@@ -7,7 +7,7 @@ from abc import abstractmethod
 class MainWidget(QtWidgets.QWidget):
     def __init__(self):
         """
-            The Main view of your applications where users will run analysis
+        The Main view of your applications where users will run analysis
         """
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
@@ -32,8 +32,7 @@ class MainWidget(QtWidgets.QWidget):
 
     @abstractmethod
     def on_click_view(self):
-        """Runs when the user clicks the view button
-        """
+        """Runs when the user clicks the view button"""
         pass
 
     @abstractmethod
