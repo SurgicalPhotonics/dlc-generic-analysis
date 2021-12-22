@@ -22,7 +22,7 @@ jobs:
           command: |
             pip install -e .
             pip install tox
-      -run:
+      - run:
         - name: Test
           - command: python -m tox
       - codecov/upload:
