@@ -17,7 +17,11 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          command: pip install tox>=3.24.4
+      - run:
+          name: Install dependencies
+          command: |
+            pip install -e .
+            pip install tox
       - run:
           name: Run tests
           command: tox
