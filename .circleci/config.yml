@@ -23,11 +23,10 @@ jobs:
             pip install -e .
             pip install tox
       - codecov/upload:
-          file: './coverage/clover.xml'
+          file: './.coverage'
           token: a7a5df63-codcov-token-4278vh38
 
 workflows:
   test:
     jobs:
       - build-and-test
-      - codecov/upload
