@@ -18,3 +18,7 @@ def test_viewer(qtbot):
     window.setBaseSize(window.sizeHint().width(), window.sizeHint().height())
     qtbot.addWidget(window)
     window.show()
+    window.on_play_pause()
+    window.on_fast_forward()
+    window.on_fast_reverse()
+    window.on_play_pause()

@@ -9,6 +9,7 @@ try:
     from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
 except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
+
     info("Cairo could not be imported. using raster AGG plots " + str(e))
 
 

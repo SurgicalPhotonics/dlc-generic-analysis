@@ -44,43 +44,14 @@ def to_avi(in_path, out_path):
         success, frame = video_cap.read()
 
 
-def down_sample(path, height=480):
-    """
-    down samples videos to be height tall
-    :param path: the path to the source video
-    :param height: the height of the downsampled video
-    :return:
-    """
-    """Down samples high res videos to more manageable resolution for DeepLabCut"""
-    cap = cv2.VideoCapture(path)
-    src_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    if src_height <= height:
-        return path
-    else:
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        frames = cap.get(cv2.CAP_PROP_FPS)
-        r_height = 360
-        ar = width / src_height
-        r_width = int(ar * 360)
-        fourcc = cv2.VideoWriter.fourcc("m", "p", "4", "v")
-        name = path[: path.rfind(".")] + "_resized.mp4"
-        writer = cv2.VideoWriter(name, fourcc, frames, (r_width, r_height))
-        s, im = cap.read()
-        while s:
-            image = cv2.resize(im, (r_width, r_height))
-            writer.write(image)
-            s, im = cap.read()
-        return name
-
-
-def angle_between_lines(m1: float, m2: float):
+def angle_between_lines(m1: float, m2: float) -> float:
     """
     calculates the angle between 2 lines in degrees
     :param m1: slope of line 1
     :param m2: slope of line 2
-    :return:
+    :return: angle
     """
-    return np.degrees(np.arctan(((m2 - m1) / (1 + m1 * m2))))
+    return float(np.degrees(np.arctan(((m2 - m1) / (1 + m1 * m2)))))
 
 
 def download_model(url: str, dest: str) -> str:

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def interpolate_gaps(data, limit:int = None) -> np.ndarray:
+def interpolate_gaps(data, limit: int = None) -> np.ndarray:
     """
     interpolates gaps in data series with np.nan
     :param data: the data to interpolate
