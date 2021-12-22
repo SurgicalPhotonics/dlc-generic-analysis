@@ -25,10 +25,10 @@ jobs:
       - run:
           name: Run tests
           command: tox
-      - codecov/upload:
-          file: { { coverage_report_filepath } }
+      -
 
 workflows:
   test:
     jobs:
       - build-and-test
+      - codecov/upload
