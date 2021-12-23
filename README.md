@@ -3,4 +3,4 @@
 
 # DeepLabCut Generic Analysis
 
-A framework for creating graphical analysis applications in Python using DeepLabCut
+A framework for creating graphical analysis applications for DeepLabCut using Qt.
