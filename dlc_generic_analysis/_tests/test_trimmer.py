@@ -10,7 +10,7 @@ def test_go_to_time(qtbot):
 
 
 def test_trimmer(qtbot):
-    trimmer = Trimmer("")
+    trimmer = Trimmer([""])
     qtbot.addWidget(trimmer)
 
 
