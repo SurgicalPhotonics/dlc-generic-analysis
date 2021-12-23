@@ -1,35 +1,22 @@
-version: 2.1
-
-executors:
-  linux:
-    docker:
-      - image: ubuntu@18.04
-
-orbs:
-  codecov: codecov/codecov@1.0.2
-
 jobs:
-  build-and-test:
-    machine:
-      image: ubuntu-2004:202111-01
+  build:
+    docker:
+      - image: circleci/python:3.8.12
     steps:
       - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - python/install-packages:
+          args: tox
+          pkg-manager: pip
       - run:
-          name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install libpulse-mainloop-glib0
-            python3 -m pip install --upgrade pip
-            python3 -m pip install -e .
-            python3 -m pip install tox
-      - run:
-          name: Test
-          command: python3 -m tox
-      - codecov/upload:
-          file: './coverage.xml'
-          token: a7a5df63-codcov-token-4278vh38
+            python3.8 -m tox
 
+orbs:
+  python: circleci/python@1.1.0
+version: 2.1
 workflows:
-  test:
+  main:
     jobs:
-      - build-and-test
+      - build
