@@ -26,9 +26,10 @@ class MW(dga.MainWidget):
         
     
     def on_click_view(self):
-        video_paths = dga.gui_utils.open_files(self, "Open Files")
+        video_paths = dga.gui_utils.open_files(self, "Open Files")[0]
         viewer = Viewer()
-        
+        viewer.load_video(video_paths)
+        viewer.play()
 
     def on_click_trim(self):
         pass
@@ -38,8 +39,9 @@ if __name__ == '__main__':
 ```
 
 ## Project Basics
-### Tensorflow
-to be able to use tensorflow GPU python needs to know where cuda is on your machine. To do this we use 
-`os.add_dll_directory(<cuda directory>)` on Windows typically this will look like 
-`os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/bin")`.
-CUDA 11.2 is the version supported by tensorflow 2.7.0.
+### Tensorflow GPU
+to be able to use tensorflow GPU on Windows, python needs to know where cuda is on your machine. To do this we use 
+`os.add_dll_directory(<cuda directory>)` on Windows CUDA adds an environment variable called `CUDA_PATH` or 
+`CUDA_PATH_V11_2` to get the specific cuda version we want if you have multiple cuda versions installed. Typically this 
+will look like `os.add_dll_directory(os.environ['CUDA_PATH_V11_2'])`.
+CUDA 11.2 is selected here as it is the version supported by tensorflow 2.7.0.
