@@ -5,13 +5,15 @@ from abc import abstractmethod
 
 
 class MainWidget(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, title):
         """
         The Main view of your applications where users will run analysis
         """
         super(MainWidget, self).__init__()
+        self.title = title
         self.setLayout(QtWidgets.QGridLayout())
-        self.layout().addWidget(self.title, alignment=Qt.AlignHCenter)
+        self.title_label = QtWidgets.QLabel(self.title)
+        self.layout().addWidget(self.title_label, alignment=Qt.AlignHCenter)
         self.analyze_button = QtWidgets.QPushButton("Analyze Videos")
         self.analyze_button.clicked.connect(self.on_click_analyze)
         self.layout().addWidget(self.analyze_button)
