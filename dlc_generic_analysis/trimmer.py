@@ -1,7 +1,6 @@
 import logging
 import multiprocessing
 import os
-import sys
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
@@ -71,7 +70,7 @@ class Trimmer(QtWidgets.QWidget):
             self.next_video_button.setDisabled(True)
         self.next_video_button.clicked.connect(self._on_click_next_video)
         self.videos_navigate.addWidget(self.next_video_button)
-        self.filename_label = QtWidgets.QLabel(" ")
+        self.filename_label = QtWidgets.QLabel()
         self.filename_label.setMargin(0)
         self.videos_navigate.setContentsMargins(0, 0, 0, 0)
         self.top_ui.addLayout(self.videos_navigate)
@@ -239,19 +238,3 @@ class Trimmer(QtWidgets.QWidget):
         with multiprocessing.Pool() as pool:
             pool.imap_unordered(_trim_pool, args)
         logging.info("done")
-        app.exit(0)
-
-
-if __name__ == "__main__":
-    if hasattr(QtCore.Qt, "AA_EnableHighDpiScaling"):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
-
-    if hasattr(QtCore.Qt, "AA_UseHighDpiPixmaps"):
-        QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
-    videos = sys.argv[1:]
-    logging.info("video " + videos[0])
-    app = QtWidgets.QApplication()
-    window = Trimmer(videos)
-    window.resize(1280, 800)
-    window.show()
-    app.exec_()

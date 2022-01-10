@@ -11,7 +11,6 @@ class MainWidget(QtWidgets.QWidget):
         """
         super(MainWidget, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
-        self.title = QtWidgets.QLabel("")
         self.layout().addWidget(self.title, alignment=Qt.AlignHCenter)
         self.analyze_button = QtWidgets.QPushButton("Analyze Videos")
         self.analyze_button.clicked.connect(self.on_click_analyze)
@@ -32,11 +31,16 @@ class MainWidget(QtWidgets.QWidget):
 
     @abstractmethod
     def on_click_view(self):
-        """Runs when the user clicks the view button"""
+        """
+        Runs when the user clicks the view button
+        """
         pass
 
     @abstractmethod
     def on_click_trim(self):
+        """
+        Runs when the users clicks the trim button
+        """
         vids = self.open_files("Select videos to trim")
         trimmer = Trimmer(vids)
         trimmer.show()

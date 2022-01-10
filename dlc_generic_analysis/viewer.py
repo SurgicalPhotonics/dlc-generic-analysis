@@ -1,5 +1,5 @@
 import os.path
-from logging import info  # , error, warning
+from logging import info
 from abc import abstractmethod
 from qtpy import QtWidgets, QtCore, QtMultimedia, QtMultimediaWidgets
 from qtpy.QtCore import Qt
