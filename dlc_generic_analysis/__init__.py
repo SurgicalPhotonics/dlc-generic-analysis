@@ -16,11 +16,5 @@ try:
 except (ModuleNotFoundError, ImportError) as e:
     info("dlc-generic-analysis GUI not loaded")
     mpl.use("agg")
-from . import (
-    analysis,
-    geometries,
-    math_utils,
-    utils,
-    video_tools,
-)
+from . import analysis, geometries, math_utils, utils, video_tools, filter
 from .dlc import dlc_analyze

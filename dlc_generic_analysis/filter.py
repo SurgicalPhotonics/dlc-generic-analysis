@@ -20,9 +20,9 @@ def threshold_confidence(h5_path: str, min_likelihood: float, save_csv=False):
     dlc_scorer = df.columns.levels[0].to_list()[0]
     bps = df.columns.levels[1].to_list()
     __threshold_bp(df, dlc_scorer, min_likelihood, bps)
-    df.to_hdf(out_path, key="scorer", mode='w')
+    df.to_hdf(out_path, key="scorer", mode="w")
     if save_csv:
-        df.to_csv(out_path.replace(".h5", ".csv"), mode='w')
+        df.to_csv(out_path.replace(".h5", ".csv"), mode="w")
 
 
 def __threshold_bp(df: DataFrame, dlc_scorer, cutoff: float, bps: List[str]):
@@ -33,7 +33,3 @@ def __threshold_bp(df: DataFrame, dlc_scorer, cutoff: float, bps: List[str]):
         y = np.ma.array(df[dlc_scorer, bp, "y"].values, mask=mask_).filled(np.nan).squeeze()
         df[dlc_scorer, bp, "x"] = x
         df[dlc_scorer, bp, "y"] = y
-
-
-if __name__ == '__main__':
-    threshold_confidence(r"C:\Users\la538\Desktop\Normal2_croppedDLC_resnet50_Aemotrics_V3Jan20shuffle1_600000_filtered.h5", .85, save_csv=True)

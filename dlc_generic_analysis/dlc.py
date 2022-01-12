@@ -4,8 +4,12 @@ from typing import List
 from logging import info
 
 
-def dlc_analyze(config: str, paths: List[str], gputouse: int = 0, filter: bool = True, min_confidence: float = .85) -> (
-List[str], str):
+def dlc_analyze(
+    config: str,
+    paths: List[str],
+    gputouse: int = 0,
+    filter: bool = True,
+) -> (List[str], str):
     """
     DLC analyze videos or a batch of videos with the same file extension. will use the 0th paths extension for encoding
     :param config: the directory containing the config.yaml file
@@ -45,7 +49,8 @@ List[str], str):
         for path in paths:
             h5.append(
                 os.path.join(
-                    dest, os.path.splitext(os.path.split(path)[1])[0] + model_slug + "_filtered" + ".h5"
+                    dest,
+                    os.path.splitext(os.path.split(path)[1])[0] + model_slug + "_filtered" + ".h5",
                 )
             )
     info("analysis done")
