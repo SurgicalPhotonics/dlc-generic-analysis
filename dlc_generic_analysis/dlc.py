@@ -41,7 +41,7 @@ List[str], str):
         )
     h5 = []
     if filter:
-        deeplabcut.filterpredictions(cfg, paths, videotype=vidtype, filtertype="arima", p_bound=min_confidence)
+        deeplabcut.filterpredictions(cfg, paths, videotype=vidtype)
         for path in paths:
             h5.append(
                 os.path.join(
