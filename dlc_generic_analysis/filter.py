@@ -3,6 +3,7 @@ import numpy as np
 from typing import List
 import pandas
 from pandas import DataFrame
+from logging import info
 
 
 def threshold_confidence(h5s: List[str], min_likelihood: float, save_csv=False):
@@ -16,14 +17,17 @@ def threshold_confidence(h5s: List[str], min_likelihood: float, save_csv=False):
         if not os.path.isfile(h5_path):
             raise FileNotFoundError
         out_path = os.path.splitext(h5_path)[0] + "_threshold.h5"
-        df = pandas.read_hdf(h5_path)
-        assert type(df) == DataFrame
-        dlc_scorer = df.columns.levels[0].to_list()[0]
-        bps = df.columns.levels[1].to_list()
-        __threshold_bp(df, dlc_scorer, min_likelihood, bps)
-        df.to_hdf(out_path, key="scorer", mode="w")
-        if save_csv:
-            df.to_csv(out_path.replace(".h5", ".csv"), mode="w")
+        if not os.path.isfile(out_path):
+            df = pandas.read_hdf(h5_path)
+            assert type(df) == DataFrame
+            dlc_scorer = df.columns.levels[0].to_list()[0]
+            bps = df.columns.levels[1].to_list()
+            __threshold_bp(df, dlc_scorer, min_likelihood, bps)
+            df.to_hdf(out_path, key="scorer", mode="w")
+            if save_csv:
+                df.to_csv(out_path.replace(".h5", ".csv"), mode="w")
+        else:
+            info(f"{h5_path} was already thresholded, skipping")
 
 
 def __threshold_bp(df: DataFrame, dlc_scorer, cutoff: float, bps: List[str]):
