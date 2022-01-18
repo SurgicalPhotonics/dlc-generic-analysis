@@ -1,10 +1,15 @@
+import os
+try:
+    cuda_bin = os.path.join(os.environ.get("CUDA_PATH_V11_2"), "bin")
+    os.add_dll_directory(cuda_bin)
+except TypeError as e:
+    pass
 try:
     from ._version import version as __version__
 except ImportError:
     __version__ = "unknown"
 from logging import info
 import matplotlib as mpl
-
 try:
     import PySide2
     from . import gui_objects, gui_utils
