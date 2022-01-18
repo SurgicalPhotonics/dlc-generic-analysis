@@ -16,12 +16,11 @@ def test_threshold_confidence():
     path_thresh = threshold_confidence([path], 0.85)[0]
     df_thresh = pandas.read_hdf(path_thresh)
     data_thresh = df_thresh["dlc_sc"].to_numpy()
-    print(data_thresh)
-    assert np.array_equal(
+    np.testing.assert_equal(
         data_thresh,
         [
             [np.nan, np.nan, 0.5, 3, 4, 0.99],
-            [6, 7, 0.8, np.nan, np.nan, 0.6],
+            [np.nan, np.nan, 0.8, np.nan, np.nan, 0.6],
             [4, 5, 0.9, 7, 8, 0.9],
         ],
     )
