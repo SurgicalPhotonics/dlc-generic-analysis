@@ -20,9 +20,12 @@ def test_analyze():
         [["dlc_sc"], ["Glab", "Ment"], ["x", "y", "likelihood"]],
         names=["scorer", "bodyparts", "coords"],
     )
-    data = np.array([[0, 1, 2, 3, 4, 5], [6, 7, 8, 1, 2, 3], [4, 5, 6, 7, 8, 9]])
+    data = np.array([[0, 1, 0.5, 3, 4, 0.99], [6, 7, 0.8, 1, 2, 0.6], [4, 5, 0.9, 7, 8, 0.9]])
+    print(data)
     df = pandas.DataFrame(data, columns=index)
     path = "test.h5"
     df.to_hdf(path, "dlc_sc")
     at = ATest(path, "dlc_sc")
+    at.draw()
+    at.write_csv()
     os.remove("test.h5")
