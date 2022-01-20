@@ -13,7 +13,7 @@ from logging import info
 import matplotlib as mpl
 
 try:
-    import PySide2
+    import PyQt5
     from . import gui_objects, gui_utils
     from .trimmer import Trimmer
     from .dlc_generic_analysis import MainWidget
