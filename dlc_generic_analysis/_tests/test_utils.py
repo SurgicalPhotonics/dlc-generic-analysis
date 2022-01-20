@@ -1,6 +1,5 @@
 from dlc_generic_analysis import utils
 import numpy as np
-import pytest
 import pandas
 
 

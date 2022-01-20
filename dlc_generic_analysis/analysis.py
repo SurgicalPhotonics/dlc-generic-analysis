@@ -1,10 +1,10 @@
 import os
 import pandas
-from abc import ABC, abstractmethod
+import abc
 
 
-class Analysis(ABC):
-    def __init__(self, h5_path, dlc_scorer, startframe=0, endframe=None):
+class Analysis(abc.ABC):
+    def __init__(self, h5_path: str, dlc_scorer: str, startframe:int =0, endframe: int =None):
         """
         Analysis:
         :param h5_path: the path of the h5 file created by analyze_videos
@@ -25,14 +25,14 @@ class Analysis(ABC):
         self.outpath = os.path.split(h5_path)[0]
         self.outpath = os.path.join(h5_path, "analyzed_videos")
 
-    @abstractmethod
+    @abc.abstractmethod
     def draw(self):
         """
         draw geometries from the analysis on the video and return a new video
         """
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def write_csv(self):
         """write data from the analysis to a file"""
         pass
