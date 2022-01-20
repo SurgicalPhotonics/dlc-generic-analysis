@@ -4,7 +4,7 @@ import abc
 
 
 class Analysis(abc.ABC):
-    def __init__(self, h5_path: str, dlc_scorer: str, startframe:int =0, endframe: int =None):
+    def __init__(self, h5_path: str, dlc_scorer: str, startframe: int = 0, endframe: int = None):
         """
         Analysis:
         :param h5_path: the path of the h5 file created by analyze_videos

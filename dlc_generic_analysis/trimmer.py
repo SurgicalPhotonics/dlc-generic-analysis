@@ -74,7 +74,7 @@ class Trimmer(QtWidgets.QWidget):
         self.filename_label.setMargin(0)
         self.videos_navigate.setContentsMargins(0, 0, 0, 0)
         self.top_ui.addLayout(self.videos_navigate)
-        self.top_ui.setMargin(0)
+        self.top_ui.setContentsMargins(0, 0, 0, 0)
         self.video_viewer = QtMultimediaWidgets.QVideoWidget()
         self.player = QtMultimedia.QMediaPlayer()
         self.player.setMuted(True)
@@ -121,7 +121,7 @@ class Trimmer(QtWidgets.QWidget):
         self.trim_control.addWidget(self.subclip_duration_label, x, y)
         y += 1
         self.trim_control.addWidget(self.finish_buttom, x, y)
-        self.layout().addLayout(self.top_ui, aligment=QtCore.Qt.AlignTop | QtCore.Qt.AlignHCenter)
+        self.layout().addLayout(self.top_ui)
         self.layout().addWidget(self.video_viewer)
         self.layout().addLayout(self.trim_control)
         self.player.setVideoOutput(self.video_viewer)
