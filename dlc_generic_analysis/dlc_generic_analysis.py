@@ -6,7 +6,7 @@ from . import gui_utils
 
 
 class MainWidget(QtWidgets.QWidget):
-    def __init__(self, title):
+    def __init__(self, title: str):
         """
         The Main view of your applications where users will run analysis
         """
