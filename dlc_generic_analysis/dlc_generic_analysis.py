@@ -2,6 +2,7 @@ from qtpy import QtWidgets
 from qtpy.QtCore import Qt
 from .trimmer import Trimmer
 from abc import abstractmethod
+from . import gui_utils
 
 
 class MainWidget(QtWidgets.QWidget):
@@ -13,7 +14,7 @@ class MainWidget(QtWidgets.QWidget):
         self.title = title
         self.setLayout(QtWidgets.QGridLayout())
         self.title_label = QtWidgets.QLabel(self.title)
-        self.layout().addWidget(self.title_label, alignment=Qt.AlignHCenter)
+        self.layout().addWidget(self.title_label)
         self.analyze_button = QtWidgets.QPushButton("Analyze Videos")
         self.analyze_button.clicked.connect(self.on_click_analyze)
         self.layout().addWidget(self.analyze_button)
@@ -43,6 +44,6 @@ class MainWidget(QtWidgets.QWidget):
         """
         Runs when the users clicks the trim button
         """
-        vids = self.open_files("Select videos to trim")
+        vids = gui_utils.open_files(self, "Select videos to trim")
         trimmer = Trimmer(vids)
         trimmer.show()
