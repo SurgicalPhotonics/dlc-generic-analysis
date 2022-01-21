@@ -2,6 +2,7 @@
 [![PyPI](https://img.shields.io/pypi/v/aemotrics.svg?color=green)](https://pypi.org/project/aemotrics)
 [![codecov](https://codecov.io/gh/SurgicalPhotonics/dlc-generic-analysis/branch/main/graph/badge.svg?token=VVV5ZKD8OL)](https://codecov.io/gh/SurgicalPhotonics/dlc-generic-analysis)
 [![Code Style Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![tests](https://github.com/SurgicalPhotonics/dlc-generic-analysis/actions/workflows/test.yml/badge.svg)](https://github.com/SurgicalPhotonics/dlc-generic-analysis/actions/workflows/test.yml)
 
 
 # dlc-generic-analysis
@@ -11,6 +12,10 @@ A framework for creating analysis applications for [DeepLabCut](https://github.c
 
 # installation
 `pip install "dlc-generic-analysis[gui]"` or for no GUI `pip install dlc-generic-analysis`
+
+# Usage
+
+For creating a basic GUI application go to [Getting Started](docs/getting_started.md)
 
 # More information
 
