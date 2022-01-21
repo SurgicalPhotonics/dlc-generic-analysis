@@ -25,4 +25,3 @@ def test_main_widget(qtbot):
 def test_trimmer(qtbot):
     tmw = TestMainWidget("test")
     qtbot.addWidget(tmw)
-
