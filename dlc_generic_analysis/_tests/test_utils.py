@@ -3,6 +3,16 @@ import numpy as np
 import pandas
 
 
+def test_distance():
+    data = [[0, 1, 2], [7, 5, 3]]
+    data1 = [[6, 3, 9], [8, 4, 3]]
+    bp1 = pandas.DataFrame(data, columns=["x", "y", "confidence"], dtype=np.float_)
+    bp2 = pandas.DataFrame(data1, columns=["x", "y", "confidence"])
+    dist = utils.distance(bp1, bp2, 1)
+    print(f"dist = {dist}")
+    assert dist == np.sqrt(2)
+
+
 def test_point_array():
     data = [[0, 1, 2], [3, 4, 5]]
     index = pandas.MultiIndex.from_product(
