@@ -19,7 +19,6 @@ except (ModuleNotFoundError, ImportError) as e:
     info("aemotrics gui not loaded")
 if "qtpy" in sys.modules and ("PySide2" in sys.modules or "PyQt5" in sys.modules):
     from dlc_generic_analysis import gui_objects, gui_utils
-    from dlc_generic_analysis.trimmer import Trimmer
     from dlc_generic_analysis.dlc_generic_analysis import MainWidget
     from dlc_generic_analysis.viewer import ViewerWidget
 

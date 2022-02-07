@@ -1,8 +1,5 @@
 from qtpy import QtWidgets
-from qtpy.QtCore import Qt
-from .trimmer import Trimmer
 from abc import abstractmethod
-from . import gui_utils
 
 
 class MainWidget(QtWidgets.QWidget):
@@ -21,9 +18,7 @@ class MainWidget(QtWidgets.QWidget):
         self.view_button = QtWidgets.QPushButton("View Analyzed Video")
         self.view_button.clicked.connect(self.on_click_view)
         self.layout().addWidget(self.view_button)
-        self.trim_button = QtWidgets.QPushButton("Trim Videos")
-        self.trim_button.clicked.connect(self.on_click_trim)
-        self.layout().addWidget(self.trim_button)
+
 
     @abstractmethod
     def on_click_analyze(self):
@@ -38,12 +33,3 @@ class MainWidget(QtWidgets.QWidget):
         Runs when the user clicks the view button
         """
         pass
-
-    @abstractmethod
-    def on_click_trim(self):
-        """
-        Runs when the users clicks the trim button
-        """
-        vids = gui_utils.open_files(self, "Select videos to trim")
-        trimmer = Trimmer(vids)
-        trimmer.show()
