@@ -17,7 +17,7 @@ def threshold_confidence(h5s: List[str], min_likelihood: float, save_csv=False) 
     ret_h5s = []
     for h5_path in h5s:
         if not os.path.isfile(h5_path):
-            raise FileNotFoundError
+            raise FileNotFoundError(f"{h5_path} is not a file")
         out_path = os.path.splitext(h5_path)[0] + "_threshold.h5"
         ret_h5s.append(out_path)
         if not os.path.isfile(out_path):
