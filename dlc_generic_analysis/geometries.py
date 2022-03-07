@@ -1,5 +1,5 @@
 from typing import Tuple
-
+import numpy as np
 
 class Line:
     """A line between two points. Used to measure scarring or other deformation
@@ -16,10 +16,10 @@ class Line:
 
     def __init__(
         self,
-        end1: Tuple[float, float] = None,
-        end2: Tuple[float, float] = None,
-        slope: float = None,
-        intercept: float = None,
+        end1: Tuple[float, float] = np.nan,
+        end2: Tuple[float, float] = np.nan,
+        slope: float = np.nan,
+        intercept: float = np.nan,
     ):
         """
         creates a Line either between 2 points or a slope and intercept
@@ -28,7 +28,7 @@ class Line:
         :param slope: The slope of the line.
         :param intercept: the Y intercept of the line
         """
-        if end1 is not None and end2 is not None:
+        if not np.isnan(end1) and not np.isnan(end2):
             if end1[0] > end2[0]:
                 self._end1 = end2
                 self._end2 = end1
@@ -38,7 +38,7 @@ class Line:
             self._slope = None
             self._intercept = None
             self._calc_slope_intercept()
-        elif slope is not None and intercept is not None:
+        elif not np.isnan(slope) and np.isnan(intercept):
             self._intercept = intercept
             self._slope = slope
             self._end1 = (0, self._intercept)

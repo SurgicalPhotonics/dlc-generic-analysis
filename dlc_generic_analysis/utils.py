@@ -30,11 +30,11 @@ def point_array(data_frame: DataFrame, points: List[str], likelihood: bool = Fal
     if likelihood:
         for point in points:
             nd_arrays.append(
-                data_frame[point[0]][["x", "y", "likelihood"]].to_numpy(dtype=np.float_)
+                data_frame[point][["x", "y", "likelihood"]].to_numpy(dtype=np.float_)
             )
     else:
         for point in points:
-            nd_arrays.append(data_frame[point[0]][["x", "y"]].to_numpy(dtype=np.float_))
+            nd_arrays.append(data_frame[point][["x", "y"]].to_numpy(dtype=np.float_))
     return np.stack(nd_arrays, axis=0)
 
 
