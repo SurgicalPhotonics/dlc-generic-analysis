@@ -19,11 +19,23 @@ def distance(bp1: DataFrame, bp2: DataFrame, frame: int):
     return d
 
 
-def point_array(data_frame: DataFrame, points: List[str]):
+def point_array(data_frame: DataFrame, points: List[str], likelihood: bool = False):
+    """
+    returns a numpy array of the XY coordinates for the Listed points
+    :param data_frame: the pandas dataframe from the h5 returned from deeplabcut's analysis
+    :param points: a list of the names of the points to return coordinates for
+    :param likelihood: if this is set True the likelihood value for each point will be included on the returned array
+    """
     nd_arrays = list()
-    for point in points:
-        nd_arrays.append(data_frame[point].to_numpy(dtype=np.float64))
-    return np.stack(nd_arrays, axis=0)[:, :, 0:2]
+    if likelihood:
+        for point in points:
+            nd_arrays.append(
+                data_frame[point[0]][["x", "y", "likelihood"]].to_numpy(dtype=np.float_)
+            )
+    else:
+        for point in points:
+            nd_arrays.append(data_frame[point[0]][["x", "y"]].to_numpy(dtype=np.float_))
+    return np.stack(nd_arrays, axis=0)
 
 
 def angle_between_lines(m1: float, m2: float) -> float:
