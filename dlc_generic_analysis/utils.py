@@ -5,9 +5,40 @@ from pandas import DataFrame
 import urllib.request
 import tarfile
 from scipy.spatial.distance import euclidean
+from numba import njit
 
 
-def distance(bp1: DataFrame, bp2: DataFrame, frame: int):
+@njit()
+def dist(point0: np.ndarray, point1: np.ndarray):
+    """
+    calculates euclidian distance between 2 coordinates in a 2d space from an array
+    exists because scipy.spatial.distance.euclidian is not elementwise
+    :param point0: the first x,y coordinate
+    :param point1: the second x,y coordinate
+    :return:
+    """
+    return np.sqrt(
+        np.power(np.abs(point1[:, 0] - point0[:, 0]), 2)
+        + np.power(np.abs(point1[:, 1] - point0[:, 1]), 2)
+    )
+
+
+@njit
+def scalar_dist(point0: np.ndarray, point1: np.ndarray):
+    """
+    calculates euclidian distance between 2 coordinates in a 2d space
+    exists because scipy.spatial.distance.euclidian is not elementwise
+    :param point0: the first x,y coordinate
+    :param point1: the second x,y coordinate
+    :return:
+    """
+    return np.sqrt(
+        np.power(np.abs(point1[0] - point0[0]), 2)
+        + np.power(np.abs(point1[1] - point0[1]), 2)
+    )
+
+
+def pd_distance(bp1: DataFrame, bp2: DataFrame, frame: int):
     """
     calculates the distance between DataFrame points
 
@@ -15,7 +46,7 @@ def distance(bp1: DataFrame, bp2: DataFrame, frame: int):
     p1 = (bp1["x"][frame], bp1["y"][frame])
     p2 = (bp2["x"][frame], bp2["y"][frame])
 
-    d = euclidean(p1, p2)
+    d = dist(p1, p2)
     return d
 
 
@@ -35,7 +66,7 @@ def point_array(data_frame: DataFrame, points: List[str], likelihood: bool = Fal
     else:
         for point in points:
             nd_arrays.append(data_frame[point][["x", "y"]].to_numpy(dtype=np.float_))
-    return np.stack(nd_arrays, axis=0)
+    return np.squeeze(np.stack(nd_arrays, axis=0))
 
 
 def angle_between_lines(m1: float, m2: float) -> float:
