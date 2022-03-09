@@ -30,3 +30,4 @@ else:
 from dlc_generic_analysis import geometries, math_utils, utils, video_tools, filter
 from dlc_generic_analysis.dlc import dlc_analyze
 from dlc_generic_analysis.analysis import Analysis
+from dlc_generic_analysis import line
