@@ -39,7 +39,7 @@ class Line:
             self._slope = None
             self._intercept = None
             self._calc_slope_intercept()
-        elif not np.isnan(slope) and slope is not None and np.isnan(intercept) and intercept is not None:
+        elif not np.isnan(slope) and slope is not None and not np.isnan(intercept) and intercept is not None:
             self._intercept = intercept
             self._slope = slope
             self._end1 = (0, self._intercept)
