@@ -29,7 +29,12 @@ class Line:
         :param slope: The slope of the line.
         :param intercept: the Y intercept of the line
         """
-        if not np.isnan(end1).any() and end1 is not None and not np.isnan(end2).any() and end2 is not None:
+        if (
+            not np.isnan(end1).any()
+            and end1 is not None
+            and not np.isnan(end2).any()
+            and end2 is not None
+        ):
             if end1[0] > end2[0]:
                 self._end1 = end2
                 self._end2 = end1
@@ -39,7 +44,12 @@ class Line:
             self._slope = None
             self._intercept = None
             self._calc_slope_intercept()
-        elif not np.isnan(slope) and slope is not None and not np.isnan(intercept) and intercept is not None:
+        elif (
+            not np.isnan(slope)
+            and slope is not None
+            and not np.isnan(intercept)
+            and intercept is not None
+        ):
             self._intercept = intercept
             self._slope = slope
             self._end1 = (0, self._intercept)

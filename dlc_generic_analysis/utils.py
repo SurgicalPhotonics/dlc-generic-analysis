@@ -4,7 +4,6 @@ import numpy as np
 from pandas import DataFrame
 import urllib.request
 import tarfile
-from scipy.spatial.distance import euclidean
 from numba import njit
 
 
@@ -33,8 +32,7 @@ def scalar_dist(point0: np.ndarray, point1: np.ndarray):
     :return:
     """
     return np.sqrt(
-        np.power(np.abs(point1[0] - point0[0]), 2)
-        + np.power(np.abs(point1[1] - point0[1]), 2)
+        np.power(np.abs(point1[0] - point0[0]), 2) + np.power(np.abs(point1[1] - point0[1]), 2)
     )
 
 
@@ -60,9 +58,7 @@ def point_array(data_frame: DataFrame, points: List[str], likelihood: bool = Fal
     nd_arrays = list()
     if likelihood:
         for point in points:
-            nd_arrays.append(
-                data_frame[point][["x", "y", "likelihood"]].to_numpy(dtype=np.float_)
-            )
+            nd_arrays.append(data_frame[point][["x", "y", "likelihood"]].to_numpy(dtype=np.float_))
     else:
         for point in points:
             nd_arrays.append(data_frame[point][["x", "y"]].to_numpy(dtype=np.float_))
@@ -106,3 +102,9 @@ def download_model(url: str, dest: str) -> str:
         os.mkdir(name)
     tar.extractall(name)
     return name
+
+
+def nan(shape, dtype: type = np.float_, order="C"):
+    arr = np.zeros(shape=shape, dtype=dtype, order=order)
+    arr[:] = np.nan
+    return arr
