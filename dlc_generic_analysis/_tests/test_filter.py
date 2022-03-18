@@ -1,7 +1,7 @@
 from dlc_generic_analysis.filter import threshold_confidence
 import pandas
 import numpy as np
-from test_data import df
+from .test_data import df
 
 
 def test_threshold_confidence():

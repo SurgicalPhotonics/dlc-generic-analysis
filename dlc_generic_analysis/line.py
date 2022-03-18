@@ -11,6 +11,8 @@ def nan_line():
 
 
 def from_slope(slope: np.ndarray, intercept: np.ndarray):
+    slope = np.array(slope)
+    intercept = np.array(intercept)
     if len(slope.shape) > 0:
         if slope.shape[0] >= 1:
             axis = 1

@@ -36,18 +36,6 @@ def scalar_dist(point0: np.ndarray, point1: np.ndarray):
     )
 
 
-def pd_distance(bp1: DataFrame, bp2: DataFrame, frame: int):
-    """
-    calculates the distance between DataFrame points
-
-    """
-    p1 = (bp1["x"][frame], bp1["y"][frame])
-    p2 = (bp2["x"][frame], bp2["y"][frame])
-
-    d = dist(p1, p2)
-    return d
-
-
 def point_array(data_frame: DataFrame, points: List[str], likelihood: bool = False):
     """
     returns a numpy array of the XY coordinates for the Listed points

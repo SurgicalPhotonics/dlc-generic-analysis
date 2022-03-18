@@ -3,14 +3,20 @@ import numpy as np
 import pandas
 
 
-def test_distance():
-    data = [[0, 1, 2], [7, 5, 3]]
-    data1 = [[6, 3, 9], [8, 4, 3]]
-    bp1 = pandas.DataFrame(data, columns=["x", "y", "confidence"], dtype=np.float_)
-    bp2 = pandas.DataFrame(data1, columns=["x", "y", "confidence"])
-    dist = utils.pd_distance(bp1, bp2, 1)
-    print(f"dist = {dist}")
-    assert dist == np.sqrt(2)
+def test_scalar_dist():
+    dist = utils.scalar_dist(np.array([10, 2]), np.array([2, 5]))
+    np.testing.assert_array_almost_equal(8.54400374531753, dist)
+    dist = utils.scalar_dist(np.array([10, 2]), np.array([2, 2]))
+    np.testing.assert_array_equal(8, dist)
+    dist = utils.scalar_dist(np.array([5, 3]), np.array([8, -2]))
+    np.testing.assert_array_almost_equal(5.830951894845301, dist)
+
+
+def test_dist():
+    dist = utils.dist(np.array([[0, 1], 0, 2]), np.array([[10, 10], [10, 25]]))
+    np.testing.assert_array_almost_equal(
+        np.array([13.45362404707371, 24.166091947189145], dtype=np.float_), dist
+    )
 
 
 def test_point_array():
