@@ -13,9 +13,9 @@ def test_scalar_dist():
 
 
 def test_dist():
-    dist = utils.dist(np.array([[0, 1], 0, 2]), np.array([[10, 10], [10, 25]]))
+    dist = utils.dist(np.array([[0, 1], [0, 2]]), np.array([[10, 10], [10, 25]]))
     np.testing.assert_array_almost_equal(
-        np.array([13.45362404707371, 24.166091947189145], dtype=np.float_), dist
+        np.array([13.45362404707371, 25.079872407968907], dtype=np.float_), dist
     )
 
 
@@ -32,6 +32,3 @@ def test_point_array():
 
 def test_angle_between_lines():
     assert np.round(utils.angle_between_lines(np.sqrt(3), 0), 6) == -60
-
-
-#  testing video manipulation functions is too expensive
