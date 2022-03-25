@@ -1,5 +1,4 @@
 from qtpy import QtWidgets
-from qtpy.QtCore import Qt
 from .trimmer import Trimmer
 from abc import abstractmethod
 from . import gui_utils

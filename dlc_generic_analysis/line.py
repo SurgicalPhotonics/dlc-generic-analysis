@@ -34,12 +34,10 @@ def from_slope(slope: np.ndarray, intercept: np.ndarray):
 
 
 def from_points(end0, end1):
-    if not end1[0] == end0[0]:
-        slope = (end1[1] - end0[1]) / (end1[0] - end0[0])
-    else:
-        slope = 9e9
-    return np.array(
-        [slope, end0[1] - slope * end0[0], end0[0], end0[1], end1[0], end1[1]], dtype=np.float_
+    slope = (end1[:, 1] - end0[:, 1]) / (end1[:, 0] - end0[:, 0])
+    return np.stack(
+        [slope, end0[:, 1] - slope * end0[:, 0], end0[:, 0], end0[:, 1], end1[:, 0], end1[:, 1]],
+        axis=1,
     )
 
 
