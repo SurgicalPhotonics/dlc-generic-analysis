@@ -26,9 +26,7 @@ class ViewerWidget(QtWidgets.QWidget):
         self.loaded = False
         self._matlab_button = QtWidgets.QPushButton("Export to MATLAB")
         self._convert_button = QtWidgets.QPushButton("Convert to MM")
-        self._top_layout = QtWidgets.QHBoxLayout()
-        self._top_layout.addWidget(self._matlab_button)
-        self._top_layout.addWidget(self._convert_button)
+        self.top_layout = QtWidgets.QHBoxLayout()
         self._play_pause = PlayPause()
         self._play_pause.play_pause_button.clicked.connect(self.on_play_pause)
         self._play_pause.fast_forward_button.clicked.connect(self.on_fast_forward)
@@ -51,7 +49,7 @@ class ViewerWidget(QtWidgets.QWidget):
         self.content_layout.addWidget(self.video_viewer)
         self._video_player.setVideoOutput(self.video_viewer)
         self.setLayout(QtWidgets.QGridLayout())
-        self.layout().addLayout(self._top_layout, 0, 0)
+        self.layout().addLayout(self.top_layout, 0, 0)
         self.layout().addLayout(self.content_layout, 1, 0)
         self.layout().addLayout(self._navigate_layout, 2, 0)
 
