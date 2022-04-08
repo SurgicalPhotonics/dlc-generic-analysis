@@ -20,6 +20,7 @@ def _trim_pool(args: Tuple[str, float, float]) -> None:
     fname, ext = os.path.splitext(args[0])
     outfile = fname + "_trimmed" + ext
     clip.write_videofile(outfile)
+    return outfile
 
 
 class GoToTime(QtWidgets.QHBoxLayout):
@@ -236,5 +237,6 @@ class Trimmer(QtWidgets.QWidget):
     def _on_click_finish(self, e):
         args = zip(self.video_paths, self.trim_start, self.trim_end)
         with multiprocessing.Pool() as pool:
-            pool.imap_unordered(_trim_pool, args)
+            videos = pool.imap_unordered(_trim_pool, args)
         logging.info("done")
+        self.trimmed_videos = videos

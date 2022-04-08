@@ -60,7 +60,7 @@ def angle_between_lines(m1: float, m2: float) -> float:
     :param m2: slope of line 2
     :return: angle
     """
-    return float(np.degrees(np.arctan(((m2 - m1) / (1 + m1 * m2)))))
+    return float((np.arctan(((m2 - m1) / (1 + m1 * m2)))))
 
 
 def download_model(url: str, dest: str) -> str:
