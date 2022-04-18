@@ -6,7 +6,9 @@ from qtpy.QtCore import Qt
 from .gui_objects import PlayPause
 
 try:
-    from matplotlib.backends.backend_qtcairo import FigureCanvasQTCairo as FigureCanvasQT
+    from matplotlib.backends.backend_qtcairo import (
+        FigureCanvasQTCairo as FigureCanvasQT,
+    )
 except (OSError, ImportError) as e:
     from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvasQT
 
