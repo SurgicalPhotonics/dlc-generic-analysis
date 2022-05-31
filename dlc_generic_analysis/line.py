@@ -33,7 +33,31 @@ def from_slope(slope: np.ndarray, intercept: np.ndarray):
     )
 
 
+def from_points_1d(end0, end1):
+    """
+    creates a numpy array representation of a line from 2 points
+    :param end0: the first point
+    :param end1: the second point
+    """
+    slope = (end1[1] - end0[1]) / (end1[0] - end0[0])
+    return np.stack(
+        [
+            slope,
+            end0[1] - slope * end0[0],
+            end0[0],
+            end0[1],
+            end1[0],
+            end1[1],
+        ]
+    )
+
+
 def from_points(end0, end1):
+    """
+    creates a list of lines from 2 2d lists of points
+    :param end0: a list of the first points
+    :param end1: a list of the second points
+    """
     slope = (end1[:, 1] - end0[:, 1]) / (end1[:, 0] - end0[:, 0])
     return np.stack(
         [
