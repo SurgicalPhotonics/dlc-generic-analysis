@@ -48,7 +48,7 @@ class ViewerWidget(QtWidgets.QWidget):
         self._video_player.stateChanged.connect(self.state_changed)
         self._video_player.durationChanged.connect(self.duration_changed)
         self.video_viewer = QtMultimediaWidgets.QVideoWidget()
-        self.content_layout.addWidget(self.video_viewer)
+        self.content_layout.addWidget(self.video_viewer, 1)
         self._video_player.setVideoOutput(self.video_viewer)
         self.setLayout(QtWidgets.QGridLayout())
         self.layout().addLayout(self.top_layout, 0, 0)
