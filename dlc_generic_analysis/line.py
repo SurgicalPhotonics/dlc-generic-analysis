@@ -52,21 +52,21 @@ def from_points_1d(end0, end1):
     )
 
 
-def from_points(end0, end1):
+def from_points(_end0, _end1):
     """
     creates a list of lines from 2 2d lists of points
-    :param end0: a list of the first points
-    :param end1: a list of the second points
+    :param _end0: a list of the first points
+    :param _end1: a list of the second points
     """
-    slope = (end1[:, 1] - end0[:, 1]) / (end1[:, 0] - end0[:, 0])
+    _slope = (_end1[:, 1] - _end0[:, 1]) / (_end1[:, 0] - _end0[:, 0])
     return np.stack(
         [
-            slope,
-            end0[:, 1] - slope * end0[:, 0],
-            end0[:, 0],
-            end0[:, 1],
-            end1[:, 0],
-            end1[:, 1],
+            _slope,
+            _end0[:, 1] - _slope * _end0[:, 0],
+            _end0[:, 0],
+            _end0[:, 1],
+            _end1[:, 0],
+            _end1[:, 1],
         ],
         axis=1,
     )
